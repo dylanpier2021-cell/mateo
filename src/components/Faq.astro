@@ -1,0 +1,54 @@
+---
+/**
+ * <Faq /> — accessible FAQ accordion (details/summary, zero JS) that also emits
+ * FAQPage JSON-LD for the questions it renders.
+ */
+import type { Faq as FaqItem } from '@data/business';
+
+interface Props {
+  faqs: FaqItem[];
+  heading?: string;
+  /** Emit FAQPage schema. Set false when another block on the page already does. */
+  schema?: boolean;
+}
+const { faqs, heading = 'Frequently asked questions', schema = true } = Astro.props;
+
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faqs.map((f) => ({
+    '@type': 'Question',
+    name: f.q,
+    acceptedAnswer: { '@type': 'Answer', text: f.a },
+  })),
+};
+---
+
+<section aria-labelledby="faq-heading">
+  <h2 id="faq-heading" class="text-3xl font-black sm:text-4xl">{heading}</h2>
+
+  <div class="mt-8 divide-y divide-[color:var(--color-line)] border-y border-[color:var(--color-line)]">
+    {
+      faqs.map((f) => (
+        <details class="group py-1">
+          <summary class="flex cursor-pointer list-none items-center justify-between gap-4 py-4 text-left text-lg font-bold text-[color:var(--color-forest)]">
+            <span>{f.q}</span>
+            <svg
+              class="shrink-0 transition-transform group-open:rotate-45"
+              width="22"
+              height="22"
+              viewBox="0 0 24 24"
+              fill="none"
+              aria-hidden="true"
+            >
+              <path d="M12 5v14M5 12h14" stroke="var(--color-grass)" stroke-width="2.5" stroke-linecap="round" />
+            </svg>
+          </summary>
+          <p class="pb-5 pr-8 text-[color:var(--color-charcoal-600)]">{f.a}</p>
+        </details>
+      ))
+    }
+  </div>
+</section>
+
+{schema && <script type="application/ld+json" is:inline set:html={JSON.stringify(faqSchema)} />}

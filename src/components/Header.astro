@@ -1,0 +1,131 @@
+---
+/**
+ * <Header /> — sticky top nav: logo, click-to-call phone, and the primary
+ * "Get a Free Quote" CTA. The quote link is the registered A2P opt-in URL, so
+ * it's present on every page by design.
+ *
+ * The mobile menu is a <details> element — it works with zero JS.
+ */
+import { NAV, BUSINESS, telHref } from '@data/business';
+import Icon from './Icon.astro';
+
+const current = Astro.url.pathname.replace(/\/$/, '') || '/';
+const isActive = (href: string) => {
+  const h = href.replace(/\/$/, '') || '/';
+  if (h === '/') return current === '/';
+  return current === h || current.startsWith(h + '/');
+};
+
+// The quote CTA renders as a button, so it's dropped from the plain link list.
+const links = NAV.filter((item) => item.href !== '/get-a-free-quote');
+---
+
+<header
+  class="site-header sticky top-0 z-50 border-b border-[color:var(--color-line)] bg-white/95 backdrop-blur"
+>
+  <nav aria-label="Primary" class="site-header__inner container-page flex items-center justify-between gap-4 py-3">
+    {/* Brand */}
+    <a href="/" class="flex shrink-0 items-center gap-2.5" aria-label={`${BUSINESS.name} — home`}>
+      <span
+        class="inline-flex h-10 w-10 items-center justify-center rounded-md bg-[color:var(--color-forest)] text-[color:var(--color-forest-300)]"
+        aria-hidden="true"
+      >
+        <Icon name="leaf" size={22} />
+      </span>
+      <span class="leading-tight">
+        <span class="block text-[0.95rem] font-black tracking-tight text-[color:var(--color-forest)]">
+          Mateo Landscaping <span class="text-[color:var(--color-grass)]">&amp; More</span>
+        </span>
+        <span class="block text-[0.6rem] font-semibold uppercase tracking-[0.16em] text-[color:var(--color-slate-soft)]">
+          {BUSINESS.homeCity}, {BUSINESS.homeState} · Since {BUSINESS.foundedYear}
+        </span>
+      </span>
+    </a>
+
+    {/* Desktop nav */}
+    <ul class="hidden items-center gap-5 xl:flex">
+      {
+        links.map((item) => (
+          <li>
+            <a
+              href={item.href}
+              aria-current={isActive(item.href) ? 'page' : undefined}
+              class:list={[
+                'nav-link text-sm font-semibold transition-colors hover:text-[color:var(--color-grass)]',
+                isActive(item.href)
+                  ? 'text-[color:var(--color-grass)]'
+                  : 'text-[color:var(--color-charcoal)]',
+              ]}
+            >
+              {item.label}
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+
+    {/* Click-to-call + primary CTA */}
+    <div class="hidden shrink-0 items-center gap-3 lg:flex">
+      <a
+        href={telHref}
+        class="inline-flex items-center gap-2 text-sm font-bold text-[color:var(--color-forest)] transition-colors hover:text-[color:var(--color-grass)]"
+      >
+        <Icon name="phone" size={17} />
+        {BUSINESS.phoneDisplay}
+      </a>
+      <a href="/get-a-free-quote" class="btn-cta !px-4 !py-2.5 text-sm">Get a Free Quote</a>
+    </div>
+
+    {/* Mobile: call button + menu */}
+    <div class="flex items-center gap-2 xl:hidden">
+      <a
+        href={telHref}
+        class="inline-flex h-10 w-10 items-center justify-center rounded-md border border-[color:var(--color-line)] text-[color:var(--color-forest)] lg:hidden"
+        aria-label={`Call ${BUSINESS.name} at ${BUSINESS.phoneDisplay}`}
+      >
+        <Icon name="phone" size={18} />
+      </a>
+
+      <details class="relative" data-mobile-menu>
+        <summary
+          class="inline-flex h-10 w-10 cursor-pointer list-none items-center justify-center rounded-md border border-[color:var(--color-line)] text-[color:var(--color-forest)]"
+          aria-label="Open menu"
+        >
+          <Icon name="menu" size={20} />
+        </summary>
+        <div
+          class="absolute right-0 z-50 mt-2 w-64 rounded-md border border-[color:var(--color-line)] bg-white p-3 shadow-xl"
+        >
+          <ul class="flex flex-col">
+            {
+              NAV.map((item) => (
+                <li>
+                  <a
+                    href={item.href}
+                    aria-current={isActive(item.href) ? 'page' : undefined}
+                    class:list={[
+                      'block rounded-md px-3 py-2.5 text-sm font-semibold transition-colors hover:bg-[color:var(--color-sand-100)]',
+                      isActive(item.href)
+                        ? 'text-[color:var(--color-grass)]'
+                        : 'text-[color:var(--color-charcoal)]',
+                    ]}
+                  >
+                    {item.label}
+                  </a>
+                </li>
+              ))
+            }
+          </ul>
+          <a href="/get-a-free-quote" class="btn-cta mt-3 w-full text-sm">Get a Free Quote</a>
+          <a
+            href={telHref}
+            class="mt-2 flex items-center justify-center gap-2 py-2 text-sm font-bold text-[color:var(--color-forest)]"
+          >
+            <Icon name="phone" size={16} />
+            {BUSINESS.phoneDisplay}
+          </a>
+        </div>
+      </details>
+    </div>
+  </nav>
+</header>

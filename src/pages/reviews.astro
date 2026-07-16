@@ -1,0 +1,133 @@
+---
+/**
+ * Reviews — customer testimonials.
+ *
+ * ⚠️ Review JSON-LD is emitted ONLY for entries that are no longer placeholders.
+ * Publishing schema.org Review markup for invented reviews would feed fake
+ * ratings to Google and mislead homeowners — so the schema stays off until the
+ * TESTIMONIALS entries are real. Same rule for aggregateRating.
+ */
+import BaseLayout from '@layouts/BaseLayout.astro';
+import PageHero from '@components/PageHero.astro';
+import TestimonialCard from '@components/TestimonialCard.astro';
+import CtaBand from '@components/CtaBand.astro';
+import Icon from '@components/Icon.astro';
+import { SITE, BUSINESS, TESTIMONIALS, mailHref, telHref } from '@data/business';
+
+const real = TESTIMONIALS.filter((t) => !t.isPlaceholder);
+const hasPlaceholders = TESTIMONIALS.some((t) => t.isPlaceholder);
+
+const reviewSchema =
+  real.length > 0
+    ? {
+        '@context': 'https://schema.org',
+        '@type': 'LocalBusiness',
+        '@id': `${SITE.url}/#business`,
+        name: BUSINESS.name,
+        review: real.map((t) => ({
+          '@type': 'Review',
+          reviewRating: { '@type': 'Rating', ratingValue: t.rating, bestRating: 5 },
+          author: { '@type': 'Person', name: t.name },
+          reviewBody: t.quote,
+        })),
+        aggregateRating: {
+          '@type': 'AggregateRating',
+          ratingValue: (real.reduce((sum, t) => sum + t.rating, 0) / real.length).toFixed(1),
+          reviewCount: real.length,
+        },
+      }
+    : null;
+---
+
+<BaseLayout
+  title={`Reviews — What Champaign Homeowners Say | ${BUSINESS.legalName}`}
+  description={`Customer reviews and testimonials for ${BUSINESS.legalName}, a family-owned landscaping, fencing, deck and handyman company serving Champaign, Urbana, Savoy and Mahomet, Illinois.`}
+  path="/reviews"
+>
+  {reviewSchema && <script type="application/ld+json" is:inline set:html={JSON.stringify(reviewSchema)} slot="head" />}
+
+  <PageHero
+    eyebrow="Reviews"
+    title="What our customers say"
+    intro="The best measure of a trades business is whether the neighbors call back. Here's what ours tell us."
+    crumb="Reviews"
+  />
+
+  <section class="py-16 sm:py-20" aria-labelledby="reviews-heading">
+    <div class="container-page">
+      <h2 id="reviews-heading" class="sr-only">Customer testimonials</h2>
+
+      {
+        hasPlaceholders && (
+          /* Visible to whoever is building the site — and honest to any visitor
+             who lands here before real reviews are in. Delete this block once
+             every TESTIMONIALS entry has isPlaceholder: false. */
+          <div
+            class="mb-10 flex items-start gap-3 rounded-md border-2 border-dashed border-[color:var(--color-sand)] bg-[color:var(--color-sand-100)] p-5"
+            data-reveal
+          >
+            <span class="mt-0.5 shrink-0 text-[color:var(--color-charcoal-600)]">
+              <Icon name="file-text" size={20} />
+            </span>
+            <div class="text-sm text-[color:var(--color-charcoal-600)]">
+              <p class="font-bold text-[color:var(--color-charcoal)]">
+                Placeholder reviews — replace before launch
+              </p>
+              <p class="mt-1">
+                The cards below marked <span class="font-semibold">“Sample — replace”</span> are
+                templates, not real customers. Swap in genuine reviews (with the customer's
+                permission) by editing <code class="rounded bg-white px-1.5 py-0.5 text-xs">TESTIMONIALS</code>{' '}
+                in <code class="rounded bg-white px-1.5 py-0.5 text-xs">src/data/business.ts</code> and
+                setting <code class="rounded bg-white px-1.5 py-0.5 text-xs">isPlaceholder: false</code>.
+                Star-rating rich results stay switched off until then — publishing invented reviews as
+                real ones is deceptive advertising, and Google penalises it.
+              </p>
+            </div>
+          </div>
+        )
+      }
+
+      <div class="grid gap-6 lg:grid-cols-3">
+        {
+          TESTIMONIALS.map((t, i) => (
+            <div data-reveal style={`--reveal-delay:${i * 80}ms`}>
+              <TestimonialCard testimonial={t} />
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  {/* ===================== LEAVE A REVIEW ===================== */}
+  <section class="bg-sand-tint py-16" aria-labelledby="leave-heading">
+    <div class="container-page">
+      <div class="card p-8 sm:p-12" data-reveal>
+        <div class="flex flex-col gap-5 sm:flex-row sm:items-start">
+          <span class="shrink-0 text-[color:var(--color-grass)]">
+            <Icon name="star" size={30} />
+          </span>
+          <div>
+            <h2 id="leave-heading" class="text-2xl font-black sm:text-3xl">Worked with us? Tell us how we did.</h2>
+            <p class="mt-4 max-w-2xl text-[color:var(--color-charcoal-600)]">
+              We read every one — the good and the not-so-good. If something wasn't right, we'd
+              genuinely rather hear it from you than read it later. Call us and we'll come back out.
+            </p>
+            <div class="mt-6 flex flex-col gap-3 sm:flex-row">
+              <a href={mailHref} class="btn-cta">
+                <Icon name="mail" size={17} />
+                Email us your review
+              </a>
+              <a href={telHref} class="btn-outline">
+                <Icon name="phone" size={17} />
+                {BUSINESS.phoneDisplay}
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <CtaBand tint={false} />
+</BaseLayout>

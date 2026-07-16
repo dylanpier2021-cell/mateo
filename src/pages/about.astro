@@ -1,0 +1,241 @@
+---
+/**
+ * About Us — company story, values, owner intro, and the real company details
+ * (NAP) that carriers cross-check against the campaign registration.
+ */
+import BaseLayout from '@layouts/BaseLayout.astro';
+import PageHero from '@components/PageHero.astro';
+import CtaBand from '@components/CtaBand.astro';
+import Icon from '@components/Icon.astro';
+import {
+  BUSINESS,
+  WHY_US,
+  telHref,
+  mailHref,
+  mapsHref,
+  addressOneLine,
+  serviceAreaLine,
+} from '@data/business';
+
+const VALUES = [
+  {
+    icon: 'shield-check',
+    title: 'Quality that outlasts the invoice',
+    body: "Anyone can make a yard look good on the day they leave. We build and plant so it still looks right in three years — the posts set deep, the beds edged properly, the boards fastened the way they should be.",
+  },
+  {
+    icon: 'message-square',
+    title: 'Honesty, including when it costs us',
+    body: "If a repair makes more sense than a replacement, we'll say so, even though the replacement pays better. If a job isn't in our wheelhouse, we'll tell you that too and point you to someone good.",
+  },
+  {
+    icon: 'clock-check',
+    title: 'Showing up on time',
+    body: "We tell you when we'll be there, and then we're there. If something changes, you get a call — not silence. We know that's a low bar in this trade. We clear it anyway.",
+  },
+];
+---
+
+<BaseLayout
+  title={`About Us — Family-Owned Landscaping in Champaign, IL | ${BUSINESS.legalName}`}
+  description={`${BUSINESS.legalName} is a family-owned landscaping and home services company in Champaign, Illinois. ${BUSINESS.yearsInBusiness} years serving Champaign–Urbana. Bilingual English and Spanish, free estimates, warrantied work.`}
+  path="/about"
+>
+  <PageHero
+    eyebrow="About us"
+    title={`${BUSINESS.yearsInBusiness} years taking care of Champaign–Urbana`}
+    intro="Family-owned, bilingual, and local. Our neighbors are our customers — which is exactly why we do the job right the first time."
+    crumb="About"
+  />
+
+  {/* ===================== STORY ===================== */}
+  <section class="py-16 sm:py-20" aria-labelledby="story-heading">
+    <div class="container-page">
+      <div class="grid items-start gap-10 lg:grid-cols-2 lg:gap-14">
+        <div data-reveal="left">
+          <div class="img-frame">
+            <img
+              src="/images/about/about-crew.jpg"
+              alt="A landscaper in a cap shearing a green hedge by hand"
+              class="aspect-[4/3] w-full object-cover"
+              width="900"
+              height="675"
+              loading="lazy"
+              decoding="async"
+            />
+          </div>
+        </div>
+
+        <div data-reveal="right">
+          <p class="eyebrow">Our story</p>
+          <h2 id="story-heading" class="mt-2 text-3xl font-black sm:text-4xl">
+            It started with a mower and a couple of neighbors
+          </h2>
+
+          <div class="mt-5 space-y-4 text-[color:var(--color-charcoal-600)]">
+            <p>
+              {BUSINESS.legalName} started in {BUSINESS.foundedYear} the way most honest trades
+              businesses do: one truck, a mower, and a few Champaign neighbors who needed their
+              yards taken care of and wanted someone who would actually show up.
+            </p>
+            <p>
+              Word travelled the way it does in a town like this. A customer we mowed for asked if
+              we could put in a fence. Then somebody wanted a deck. Then a homeowner we'd worked for
+              all summer asked whether we could patch the drywall in her back room — and we could.
+              That is where the "and More" in our name came from. It wasn't a marketing decision;
+              it was just us saying yes to our customers, one job at a time.
+            </p>
+            <p>
+              {BUSINESS.yearsInBusiness} years on, we're still family-owned and still local. We're
+              big enough to build your deck and take care of your lawn all season, and small enough
+              that the person who gives you the estimate is the person you'll see on your property.
+            </p>
+            <p>
+              We work in English and Spanish — <span class="italic">hablamos español</span> — because
+              plenty of our neighbors and our crew do, and nobody should have to guess at what's
+              happening on their own property.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  {/* ===================== OWNER ===================== */}
+  <section class="bg-sand-tint py-16 sm:py-20" aria-labelledby="owner-heading">
+    <div class="container-page">
+      <div class="card p-8 sm:p-12" data-reveal>
+        <p class="eyebrow">Meet the owner</p>
+        <h2 id="owner-heading" class="mt-2 text-2xl font-black sm:text-3xl">The person who answers the phone</h2>
+        <div class="mt-5 max-w-3xl space-y-4 text-[color:var(--color-charcoal-600)]">
+          <p>
+            When you call {BUSINESS.name}, you're not routed through a call center in another state.
+            You get the owner, or someone who works alongside him every day and can answer for the
+            work.
+          </p>
+          <p>
+            That's deliberate. When the person who quotes the job is the person who has to stand
+            behind it, the number you get is realistic and the work matches what was promised. It's
+            harder to run a business this way. It's also the only way we know how to keep neighbors
+            as customers for {BUSINESS.yearsInBusiness} years.
+          </p>
+        </div>
+
+        <div class="mt-8 flex flex-col gap-3 sm:flex-row">
+          <a href={telHref} class="btn-cta">
+            <Icon name="phone" size={17} />
+            {BUSINESS.phoneDisplay}
+          </a>
+          <a href="/get-a-free-quote" class="btn-outline">Get a free estimate</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  {/* ===================== VALUES ===================== */}
+  <section class="py-16 sm:py-20" aria-labelledby="values-heading">
+    <div class="container-page">
+      <div class="max-w-2xl" data-reveal>
+        <p class="eyebrow">What we stand for</p>
+        <h2 id="values-heading" class="mt-2 text-3xl font-black sm:text-4xl">Three things we don't compromise on</h2>
+      </div>
+
+      <div class="mt-10 grid gap-6 lg:grid-cols-3">
+        {
+          VALUES.map((v, i) => (
+            <div class="card p-7" data-reveal style={`--reveal-delay:${i * 90}ms`}>
+              <span class="inline-flex h-12 w-12 items-center justify-center rounded-md bg-[color:var(--color-forest)] text-[color:var(--color-forest-300)]">
+                <Icon name={v.icon} size={23} />
+              </span>
+              <h3 class="mt-5 text-lg font-black">{v.title}</h3>
+              <p class="mt-2.5 text-[color:var(--color-charcoal-600)]">{v.body}</p>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  {/* ===================== WHY US STRIP ===================== */}
+  <section class="bg-sand-tint py-16" aria-labelledby="whyus-heading">
+    <div class="container-page">
+      <h2 id="whyus-heading" class="text-2xl font-black sm:text-3xl">Why homeowners pick us</h2>
+      <div class="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+        {
+          WHY_US.map((item, i) => (
+            <div class="flex items-start gap-3" data-reveal style={`--reveal-delay:${i * 60}ms`}>
+              <span class="mt-0.5 shrink-0 text-[color:var(--color-grass)]">
+                <Icon name="check-circle" size={20} />
+              </span>
+              <div>
+                <p class="font-bold text-[color:var(--color-forest)]">{item.title}</p>
+                <p class="text-sm text-[color:var(--color-charcoal-600)]">{item.body}</p>
+              </div>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  {/* ===================== COMPANY DETAILS (NAP) ===================== */}
+  <section class="py-16" aria-labelledby="details-heading">
+    <div class="container-page">
+      <div class="card p-8 sm:p-12" data-reveal>
+        <h2 id="details-heading" class="text-2xl font-black sm:text-3xl">Company details</h2>
+        <p class="mt-3 text-[color:var(--color-charcoal-600)]">{serviceAreaLine}</p>
+
+        <dl class="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          <div>
+            <dt class="text-xs font-bold uppercase tracking-[0.14em] text-[color:var(--color-grass)]">Legal name</dt>
+            <dd class="mt-1.5 font-semibold text-[color:var(--color-forest)]">{BUSINESS.legalName}</dd>
+          </div>
+          <div>
+            <dt class="text-xs font-bold uppercase tracking-[0.14em] text-[color:var(--color-grass)]">Doing business as</dt>
+            <dd class="mt-1.5 font-semibold text-[color:var(--color-forest)]">{BUSINESS.dba}</dd>
+          </div>
+          <div>
+            <dt class="text-xs font-bold uppercase tracking-[0.14em] text-[color:var(--color-grass)]">In business since</dt>
+            <dd class="mt-1.5 font-semibold text-[color:var(--color-forest)]">
+              {BUSINESS.foundedYear} · {BUSINESS.yearsInBusiness} years
+            </dd>
+          </div>
+          <div>
+            <dt class="text-xs font-bold uppercase tracking-[0.14em] text-[color:var(--color-grass)]">Address</dt>
+            <dd class="mt-1.5">
+              <a href={mapsHref} target="_blank" rel="noopener" class="font-semibold text-[color:var(--color-forest)] hover:underline">
+                {addressOneLine}
+              </a>
+            </dd>
+          </div>
+          <div>
+            <dt class="text-xs font-bold uppercase tracking-[0.14em] text-[color:var(--color-grass)]">Phone</dt>
+            <dd class="mt-1.5">
+              <a href={telHref} class="font-semibold text-[color:var(--color-forest)] hover:underline">
+                {BUSINESS.phoneDisplay}
+              </a>
+            </dd>
+          </div>
+          <div>
+            <dt class="text-xs font-bold uppercase tracking-[0.14em] text-[color:var(--color-grass)]">Email</dt>
+            <dd class="mt-1.5">
+              <a href={mailHref} class="font-semibold text-[color:var(--color-forest)] hover:underline">
+                {BUSINESS.email}
+              </a>
+            </dd>
+          </div>
+          <div>
+            <dt class="text-xs font-bold uppercase tracking-[0.14em] text-[color:var(--color-grass)]">Hours</dt>
+            <dd class="mt-1.5 font-semibold text-[color:var(--color-forest)]">{BUSINESS.hours.display}</dd>
+          </div>
+          <div>
+            <dt class="text-xs font-bold uppercase tracking-[0.14em] text-[color:var(--color-grass)]">Languages</dt>
+            <dd class="mt-1.5 font-semibold text-[color:var(--color-forest)]">{BUSINESS.languages.join(' · ')}</dd>
+          </div>
+        </dl>
+      </div>
+    </div>
+  </section>
+
+  <CtaBand />
+</BaseLayout>

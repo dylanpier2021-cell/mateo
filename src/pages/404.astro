@@ -1,0 +1,54 @@
+---
+/**
+ * 404 — a real page rather than a host default, so a mistyped URL still lands
+ * somewhere branded with a way back. Reviewers do poke at URLs.
+ */
+import BaseLayout from '@layouts/BaseLayout.astro';
+import Icon from '@components/Icon.astro';
+import { BUSINESS, NAV, telHref } from '@data/business';
+---
+
+<BaseLayout
+  title={`Page Not Found | ${BUSINESS.legalName}`}
+  description="That page doesn't exist. Head back to the home page or get a free estimate from Mateo Landscaping and More LLC."
+  path="/404"
+  noindex={true}
+>
+  <section class="bg-[color:var(--color-forest)] py-20 text-white sm:py-28">
+    <div class="container-page text-center">
+      <p class="eyebrow !text-[color:var(--color-forest-300)]">Error 404</p>
+      <h1 class="mt-3 text-4xl font-black !text-white sm:text-5xl">We couldn't find that page</h1>
+      <p class="mx-auto mt-5 max-w-xl text-lg text-white/80">
+        The link may be out of date, or the address might have a typo in it. Here's the way back.
+      </p>
+
+      <div class="mt-8 flex flex-col justify-center gap-3 sm:flex-row">
+        <a href="/" class="btn-cta text-base">Back to home</a>
+        <a href={telHref} class="btn-outline-light text-base">
+          <Icon name="phone" size={17} />
+          {BUSINESS.phoneDisplay}
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <section class="py-16">
+    <div class="container-page">
+      <h2 class="text-center text-2xl font-black">Try one of these</h2>
+      <ul class="mx-auto mt-8 flex max-w-3xl flex-wrap justify-center gap-2.5">
+        {
+          NAV.map((item) => (
+            <li>
+              <a
+                href={item.href}
+                class="inline-flex items-center gap-1.5 rounded-full border border-[color:var(--color-line)] bg-white px-4 py-2 text-sm font-semibold text-[color:var(--color-forest)] transition-colors hover:border-[color:var(--color-grass)] hover:text-[color:var(--color-grass)]"
+              >
+                {item.label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+</BaseLayout>

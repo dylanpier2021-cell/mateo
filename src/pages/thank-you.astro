@@ -1,0 +1,92 @@
+---
+/**
+ * Thank You — the post-submit confirmation for both forms.
+ *
+ * 🚨 A2P rule: after submitting an opt-in form the user must land on a simple
+ * confirmation page — NEVER another opt-in form. So there is deliberately no
+ * <LeadForm /> on this page, and there must never be one. Links out to Services
+ * and Our Work are fine; a second consent form is not.
+ *
+ * noindex: this page only makes sense as a post-submit destination.
+ */
+import BaseLayout from '@layouts/BaseLayout.astro';
+import Icon from '@components/Icon.astro';
+import { BUSINESS, telHref, mailHref, serviceAreaLine } from '@data/business';
+---
+
+<BaseLayout
+  title={`Thank You — We'll Be In Touch | ${BUSINESS.legalName}`}
+  description="Thanks for getting in touch with Mateo Landscaping and More LLC. We've received your request and will get back to you shortly."
+  path="/thank-you"
+  noindex={true}
+>
+  <section class="bg-[color:var(--color-forest)] py-20 text-white sm:py-28">
+    <div class="container-page">
+      <div class="mx-auto max-w-2xl text-center">
+        <span
+          class="mx-auto inline-flex h-16 w-16 items-center justify-center rounded-full bg-[color:var(--color-grass)] text-white"
+          aria-hidden="true"
+        >
+          <Icon name="check" size={32} stroke={3} />
+        </span>
+
+        <h1 class="mt-7 text-4xl font-black !text-white sm:text-5xl">Thank you — we'll be in touch</h1>
+
+        <p class="mt-5 text-lg text-white/80">
+          We've got your message and it's already in front of a real person. You'll hear back from
+          us shortly — usually the same day, and always within one business day.
+        </p>
+
+        <p class="mt-4 text-white/70">
+          If it's urgent, don't wait on us — just call.
+        </p>
+
+        <div class="mt-8 flex flex-col justify-center gap-3 sm:flex-row">
+          <a href={telHref} class="btn-cta text-base">
+            <Icon name="phone" size={17} />
+            {BUSINESS.phoneDisplay}
+          </a>
+          <a href={mailHref} class="btn-outline-light text-base">
+            <Icon name="mail" size={17} />
+            {BUSINESS.email}
+          </a>
+        </div>
+
+        <p class="mt-8 text-sm text-white/60">{BUSINESS.hours.display}</p>
+      </div>
+    </div>
+  </section>
+
+  {/* ===================== WHAT HAPPENS NEXT ===================== */}
+  <section class="py-16 sm:py-20">
+    <div class="container-page">
+      <h2 class="text-center text-2xl font-black sm:text-3xl">What happens next</h2>
+
+      <ol class="mx-auto mt-10 grid max-w-4xl gap-6 sm:grid-cols-3">
+        {
+          [
+            { n: '1', title: 'We read it', body: "Your message goes straight to us — not a queue in another state." },
+            { n: '2', title: 'We call you back', body: 'Usually the same day, to ask anything we need and set a time to come look.' },
+            { n: '3', title: 'You get your estimate', body: "Free, no obligation, and a straight number for the actual work." },
+          ].map((step) => (
+            <li class="card p-6 text-center">
+              <span class="mx-auto inline-flex h-10 w-10 items-center justify-center rounded-full bg-[color:var(--color-sand-100)] font-black text-[color:var(--color-grass)]">
+                {step.n}
+              </span>
+              <h3 class="mt-4 text-lg font-black">{step.title}</h3>
+              <p class="mt-2 text-sm text-[color:var(--color-charcoal-600)]">{step.body}</p>
+            </li>
+          ))
+        }
+      </ol>
+
+      <p class="mt-10 text-center text-sm text-[color:var(--color-slate-soft)]">{serviceAreaLine}</p>
+
+      {/* Somewhere to go next — deliberately NOT another form */}
+      <div class="mt-8 flex flex-col justify-center gap-3 sm:flex-row">
+        <a href="/our-work" class="btn-outline">See our work</a>
+        <a href="/services" class="btn-outline">Browse services</a>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

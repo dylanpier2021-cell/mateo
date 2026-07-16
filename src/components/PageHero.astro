@@ -1,0 +1,39 @@
+---
+/**
+ * <PageHero /> — compact forest-green banner for interior pages. Keeps every
+ * page below the home page visually consistent.
+ */
+import Icon from './Icon.astro';
+
+interface Props {
+  eyebrow?: string;
+  title: string;
+  intro?: string;
+  /** Breadcrumb trail; the current page is appended automatically. */
+  crumb?: string;
+}
+
+const { eyebrow, title, intro, crumb } = Astro.props;
+---
+
+<section class="bg-[color:var(--color-forest)] text-white">
+  <div class="container-page py-14 sm:py-18">
+    {
+      crumb && (
+        <nav aria-label="Breadcrumb" class="mb-5">
+          <ol class="flex items-center gap-1.5 text-xs text-white/60">
+            <li><a href="/" class="hover:text-white hover:underline">Home</a></li>
+            <li aria-hidden="true" class="flex items-center"><Icon name="chevron-right" size={13} /></li>
+            <li aria-current="page" class="font-semibold text-[color:var(--color-forest-300)]">{crumb}</li>
+          </ol>
+        </nav>
+      )
+    }
+
+    {eyebrow && <p class="eyebrow !text-[color:var(--color-forest-300)]">{eyebrow}</p>}
+
+    <h1 class="mt-2 max-w-3xl text-4xl font-black !text-white sm:text-5xl">{title}</h1>
+
+    {intro && <p class="mt-5 max-w-2xl text-lg text-white/80">{intro}</p>}
+  </div>
+</section>

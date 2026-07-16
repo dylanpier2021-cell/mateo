@@ -1,0 +1,23 @@
+# Netlify deploy config for Mateo Landscaping and More LLC (Astro static site)
+[build]
+  command = "npm run build"
+  publish = "dist"
+
+[build.environment]
+  NODE_VERSION = "20"
+
+# Canonical URLs are emitted without a trailing slash (astro trailingSlash: never).
+[[redirects]]
+  from = "/*/"
+  to = "/:splat"
+  status = 301
+  force = false
+
+# HTTPS is mandatory for A2P review. Netlify provisions the cert automatically;
+# these headers harden the site so the reviewer sees a clean, secure origin.
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Content-Type-Options = "nosniff"
+    X-Frame-Options = "SAMEORIGIN"
+    Referrer-Policy = "strict-origin-when-cross-origin"

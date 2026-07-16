@@ -1,0 +1,205 @@
+---
+/**
+ * Terms & Conditions — dedicated page, linked separately in the footer and
+ * below every form's consent checkboxes.
+ *
+ * The SMS section mirrors the consent language on the forms and the Privacy
+ * Policy — all three read from business.ts, so they cannot contradict each
+ * other. Contradictions between these three surfaces are a common rejection.
+ *
+ * NOTE: an honest starting set of terms that reflects how this business
+ * actually operates. Not legal advice — have counsel review before launch.
+ */
+import BaseLayout from '@layouts/BaseLayout.astro';
+import PageHero from '@components/PageHero.astro';
+import { BUSINESS, addressOneLine, telHref, mailHref, serviceAreaLine } from '@data/business';
+
+const LAST_UPDATED = 'July 16, 2026';
+---
+
+<BaseLayout
+  title={`Terms & Conditions | ${BUSINESS.legalName}`}
+  description="The terms and conditions governing use of the Mateo Landscaping and More LLC website, our estimates and services, and our text messaging program."
+  path="/terms-and-conditions"
+>
+  <PageHero eyebrow="Legal" title="Terms &amp; Conditions" crumb="Terms & Conditions" />
+
+  <section class="py-16">
+    <div class="container-page">
+      <div class="prose-legal mx-auto max-w-3xl">
+        <p class="text-sm text-[color:var(--color-slate-soft)]">Last updated: {LAST_UPDATED}</p>
+
+        <p>
+          These Terms &amp; Conditions (“Terms”) govern your use of the website operated by{' '}
+          <strong>{BUSINESS.legalName}</strong> (“we,” “us,” or “our”), and your participation in our
+          text messaging program. By using this site or submitting a form, you agree to these Terms.
+        </p>
+
+        <h2>1. About us</h2>
+        <p>
+          {BUSINESS.legalName} is a family-owned landscaping and home services company based at{' '}
+          {addressOneLine}. We provide lawn care and landscaping, fencing, decks, and handyman and
+          remodeling services. {serviceAreaLine}
+        </p>
+
+        <h2>2. Estimates and quotes</h2>
+        <ul>
+          <li>Estimates are <strong>free and carry no obligation</strong>. Requesting one does not commit you to hiring us.</li>
+          <li>
+            Every property is different, so estimates are based on the specific work we assess on
+            site. Information submitted through this website lets us prepare an estimate — it is not
+            itself a binding quote.
+          </li>
+          <li>
+            If conditions change once work begins — something hidden under the surface, an
+            unforeseen obstruction, a change you request — we will discuss it with you and agree any
+            price change <em>before</em> we carry out the extra work. You will not be surprised by an
+            invoice.
+          </li>
+          <li>Estimates are valid for 30 days unless we state otherwise in writing.</li>
+        </ul>
+
+        <h2>3. Scheduling and access</h2>
+        <ul>
+          <li>
+            We schedule in good faith and we show up when we say we will. Weather, ground conditions,
+            and the pace of preceding jobs can move outdoor work; if that happens, we will contact you.
+          </li>
+          <li>
+            You agree to provide safe, lawful access to the work area, and to tell us about anything
+            we should know about — buried utilities, irrigation lines, invisible pet fencing, septic
+            fields, easements, or property line disputes.
+          </li>
+          <li>
+            You are responsible for obtaining any permission you need from a homeowners' association,
+            landlord, or neighbour before work starts.
+          </li>
+        </ul>
+
+        <h2>4. Permits, utilities and property lines</h2>
+        <p>
+          Some work — particularly fencing and decks — may require a permit or a utility locate. We
+          will tell you when we believe one is needed, and we will not knowingly proceed without it.
+          You are responsible for confirming your property boundaries. If a fence or structure is
+          built on a line you identified and that line proves incorrect, the cost of relocating it is
+          not covered by our warranty.
+        </p>
+
+        <h2>5. Payment</h2>
+        <ul>
+          <li>Payment terms are set out in your estimate or invoice. Larger projects may require a deposit before materials are ordered.</li>
+          <li>Invoices are due on the terms stated on the invoice.</li>
+          <li>Materials remain our property until paid for in full.</li>
+        </ul>
+
+        <h2>6. Warranty</h2>
+        <p>
+          <strong>We stand behind our work.</strong> If our workmanship isn't right, tell us and we
+          will come back and make it right. The specific warranty period and scope depend on the type
+          of work and are stated in your estimate.
+        </p>
+        <p>Our warranty does not cover:</p>
+        <ul>
+          <li>Damage from weather, storms, flooding, fire, or other events outside our control.</li>
+          <li>Normal weathering, fading, seasonal movement, or the natural aging of wood and other materials.</li>
+          <li>Damage caused by neglect, misuse, alteration, or work performed by someone else after we finish.</li>
+          <li>
+            Plant material beyond the establishment period stated in your estimate — living things
+            depend on watering and care after we leave.
+          </li>
+          <li>Manufacturer defects in materials, which are covered by the manufacturer's own warranty. We will help you claim under it.</li>
+        </ul>
+
+        <h2>7. Cancellation</h2>
+        <p>
+          Let us know as early as you can. If you cancel after we have ordered custom materials or
+          begun work, you remain responsible for materials already purchased and work already
+          performed. Where you have a cancellation right under Illinois or federal law, nothing in
+          these Terms limits it.
+        </p>
+
+        <h2>8. Text messaging program</h2>
+        <p>
+          Our text messaging program is entirely optional. On our forms you may separately consent to:
+        </p>
+        <ul>
+          <li>
+            <strong>Transactional messages</strong> — reminders, appointment confirmations, and
+            service updates relating to services you have requested from us; and
+          </li>
+          <li>
+            <strong>Marketing and promotional messages</strong> — special offers, discounts, and
+            seasonal service reminders.
+          </li>
+        </ul>
+        <p>
+          Both consent boxes are unchecked by default and are optional. <strong>You are not required
+          to consent to text messages in order to submit a form or to hire us</strong>, and consent to
+          marketing messages is not a condition of any purchase.
+        </p>
+        <p>
+          Message frequency may vary. Message and data rates may apply — those charges come from your
+          mobile carrier, not from us. Reply <strong>HELP</strong> for help or <strong>STOP</strong>{' '}
+          to opt out at any time. After you reply STOP we will send one confirmation message and then
+          stop. Carriers are not liable for delayed or undelivered messages.
+        </p>
+        <p>
+          Our handling of your mobile information is described in our{' '}
+          <a href="/privacy-policy">Privacy Policy</a>.
+        </p>
+
+        <h2>9. Use of this website</h2>
+        <ul>
+          <li>The content, photographs, and design of this site are our property or are used under licence, and may not be copied for commercial use without our permission.</li>
+          <li>You agree not to misuse the site, submit false information, or use our forms to send unsolicited or automated submissions.</li>
+          <li>We may change or remove site content at any time.</li>
+        </ul>
+
+        <h2>10. Accuracy of information</h2>
+        <p>
+          We work to keep this site accurate and current, but we do not warrant that everything on it
+          is complete or error-free. Photographs are illustrative of the type of work we do. Nothing
+          on this website constitutes a binding offer or a guaranteed price.
+        </p>
+
+        <h2>11. Limitation of liability</h2>
+        <p>
+          To the fullest extent permitted by Illinois law, our total liability arising out of any job
+          is limited to the amount you paid us for that job. We are not liable for indirect,
+          incidental, or consequential damages. Nothing in these Terms excludes liability that cannot
+          lawfully be excluded — including liability for death or personal injury caused by our
+          negligence.
+        </p>
+
+        <h2>12. Governing law</h2>
+        <p>
+          These Terms are governed by the laws of the State of {BUSINESS.homeStateFull}, without
+          regard to its conflict of law rules. Any dispute will be brought in the state or federal
+          courts located in {BUSINESS.homeStateFull}.
+        </p>
+
+        <h2>13. Changes to these Terms</h2>
+        <p>
+          We may update these Terms from time to time. The version posted on this page at the time
+          you use the site is the version that applies to you. Changes do not affect a contract we
+          have already agreed with you.
+        </p>
+
+        <h2>14. Contact us</h2>
+        <p>Questions about these Terms:</p>
+        <ul>
+          <li><strong>{BUSINESS.legalName}</strong></li>
+          <li>{addressOneLine}</li>
+          <li>Phone: <a href={telHref}>{BUSINESS.phoneDisplay}</a></li>
+          <li>Email: <a href={mailHref}>{BUSINESS.email}</a></li>
+        </ul>
+
+        <hr class="rule-sand my-10" />
+        <p class="text-sm text-[color:var(--color-slate-soft)]">
+          &copy; {new Date().getFullYear()} {BUSINESS.legalName}. These Terms were last updated on{' '}
+          {LAST_UPDATED}.
+        </p>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

@@ -1,0 +1,572 @@
+/* ==========================================================================
+   MATEO LANDSCAPING AND MORE LLC — Global styles & design system
+   Tailwind v4, CSS-first config.
+   Brand: deep green + warm sand/tan + charcoal + white. Bright green CTAs.
+   Feel: rugged but polished — a skilled trade, not a corporate lawn franchise.
+   ========================================================================== */
+
+@import 'tailwindcss';
+
+/* --------------------------------------------------------------------------
+   THEME TOKENS — exposed as Tailwind utilities (bg-forest, text-sand, etc.)
+   -------------------------------------------------------------------------- */
+@theme {
+  /* Greens */
+  --color-forest: #1b4332; /* deep green — primary brand */
+  --color-forest-700: #245741;
+  --color-forest-600: #2d6a4f;
+  --color-forest-300: #74c69d;
+
+  /* Bright green — CTAs only. Darkened just enough to clear 4.5:1 on white
+     text, so the buttons stay vivid without failing contrast. */
+  --color-grass: #2b8a3e;
+  --color-grass-600: #237032;
+  --color-grass-400: #40b45c;
+
+  /* Warm tan / sand */
+  --color-sand: #d6c7a1;
+  --color-sand-200: #ece4d1;
+  --color-sand-100: #f6f2e8; /* page tint */
+
+  /* Neutrals */
+  --color-charcoal: #2b2b2b;
+  --color-charcoal-600: #4a4a4a;
+  --color-slate-soft: #6b6b6b; /* secondary text */
+  --color-line: #e2dcc9; /* hairline borders on light surfaces */
+  --color-line-dark: #2f5344; /* hairline borders on forest surfaces */
+
+  /* Fonts — system stacks, zero third-party requests (keeps LCP fast). */
+  --font-display: 'Helvetica Neue', 'Segoe UI', system-ui, -apple-system, sans-serif;
+  --font-body: system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+
+  /* Radius — softly rounded: polished, but not bubbly. */
+  --radius: 6px;
+}
+
+/* --------------------------------------------------------------------------
+   BASE
+   -------------------------------------------------------------------------- */
+:root {
+  color-scheme: light;
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 6rem; /* offset anchor jumps for the sticky header */
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  background-color: #ffffff;
+  color: var(--color-charcoal);
+  font-family: var(--font-body);
+  line-height: 1.65;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}
+
+h1,
+h2,
+h3,
+h4 {
+  font-family: var(--font-display);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1.12;
+  color: var(--color-forest);
+  text-wrap: balance;
+}
+
+/* --------------------------------------------------------------------------
+   ACCESSIBILITY — focus states + skip link
+   -------------------------------------------------------------------------- */
+:focus-visible {
+  outline: 3px solid var(--color-grass);
+  outline-offset: 2px;
+  border-radius: 3px;
+}
+
+.skip-link {
+  position: absolute;
+  left: 0.5rem;
+  top: -100px;
+  z-index: 100;
+  background: var(--color-grass);
+  color: #fff;
+  padding: 0.75rem 1.25rem;
+  font-weight: 700;
+  border-radius: var(--radius);
+  transition: top 0.15s ease;
+}
+.skip-link:focus {
+  top: 0.5rem;
+}
+
+/* --------------------------------------------------------------------------
+   LAYOUT HELPERS
+   -------------------------------------------------------------------------- */
+.container-page {
+  width: 100%;
+  max-width: 78rem;
+  margin-inline: auto;
+  padding-inline: 1.25rem;
+}
+
+.eyebrow {
+  display: inline-block;
+  font-weight: 700;
+  font-size: 0.75rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--color-grass);
+}
+
+/* Warm sand section background */
+.bg-sand-tint {
+  background-color: var(--color-sand-100);
+}
+
+/* Hairline divider */
+.rule-sand {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--color-sand), transparent);
+  border: 0;
+}
+
+/* --------------------------------------------------------------------------
+   BUTTONS
+   -------------------------------------------------------------------------- */
+.btn-cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  background: var(--color-grass);
+  color: #fff;
+  font-weight: 800;
+  letter-spacing: 0.01em;
+  padding: 0.9rem 1.6rem;
+  border-radius: var(--radius);
+  border: 1px solid transparent;
+  box-shadow: 0 8px 22px -10px rgba(43, 138, 62, 0.75);
+  transition: transform 0.12s ease, background-color 0.12s ease, box-shadow 0.15s ease;
+  text-align: center;
+}
+.btn-cta:hover {
+  background: var(--color-grass-600);
+  transform: translateY(-1px);
+  box-shadow: 0 12px 28px -10px rgba(43, 138, 62, 0.85);
+}
+.btn-cta:active {
+  transform: translateY(0);
+}
+
+.btn-outline {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  background: transparent;
+  color: var(--color-forest);
+  font-weight: 700;
+  padding: 0.9rem 1.6rem;
+  border-radius: var(--radius);
+  border: 2px solid var(--color-forest);
+  transition: background-color 0.12s ease, color 0.12s ease;
+  text-align: center;
+}
+.btn-outline:hover {
+  background: var(--color-forest);
+  color: #fff;
+}
+
+/* Outline button placed on a dark/forest background */
+.btn-outline-light {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  background: transparent;
+  color: #fff;
+  font-weight: 700;
+  padding: 0.9rem 1.6rem;
+  border-radius: var(--radius);
+  border: 2px solid rgba(255, 255, 255, 0.65);
+  transition: background-color 0.12s ease, border-color 0.12s ease;
+  text-align: center;
+}
+.btn-outline-light:hover {
+  background: rgba(255, 255, 255, 0.14);
+  border-color: #fff;
+}
+
+/* --------------------------------------------------------------------------
+   CARDS
+   -------------------------------------------------------------------------- */
+.card {
+  background: #fff;
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius);
+  transition: transform 0.18s ease, border-color 0.18s ease, box-shadow 0.25s ease;
+}
+.card:hover {
+  border-color: var(--color-forest-300);
+  box-shadow: 0 18px 40px -24px rgba(27, 67, 50, 0.55);
+}
+
+/* --------------------------------------------------------------------------
+   FORMS — shared by the Contact and Quote forms
+   -------------------------------------------------------------------------- */
+.field {
+  width: 100%;
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius);
+  background: #fff;
+  padding: 0.7rem 0.85rem;
+  color: var(--color-charcoal);
+  font-size: 1rem;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+.field::placeholder {
+  color: #9a9a9a;
+}
+.field:focus-visible {
+  border-color: var(--color-grass);
+  box-shadow: 0 0 0 3px rgba(43, 138, 62, 0.16);
+  outline: none;
+}
+
+.field-label {
+  display: block;
+  margin-bottom: 0.35rem;
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--color-charcoal);
+}
+
+/* Consent checkbox row. The box is deliberately large and the label text is
+   full-size and legible — carriers reject "hidden" or shrunken consent copy. */
+.consent-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  padding: 0.9rem;
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius);
+  background: #fff;
+  cursor: pointer;
+  transition: border-color 0.15s ease, background-color 0.15s ease;
+}
+.consent-row:hover {
+  border-color: var(--color-forest-300);
+  background: var(--color-sand-100);
+}
+.consent-row input[type='checkbox'] {
+  margin-top: 0.15rem;
+  height: 1.15rem;
+  width: 1.15rem;
+  flex: none;
+  accent-color: var(--color-grass);
+  cursor: pointer;
+}
+.consent-text {
+  font-size: 0.85rem;
+  line-height: 1.6;
+  color: var(--color-charcoal-600);
+}
+
+/* --------------------------------------------------------------------------
+   CHECK LISTS
+   -------------------------------------------------------------------------- */
+.check-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.check-list li {
+  position: relative;
+  padding-left: 1.85rem;
+  margin-bottom: 0.55rem;
+}
+.check-list li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.3rem;
+  width: 1.1rem;
+  height: 1.1rem;
+  background: var(--color-grass);
+  -webkit-mask: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path fill='black' d='M9 16.2 4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4z'/></svg>") no-repeat center / contain;
+  mask: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path fill='black' d='M9 16.2 4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4z'/></svg>") no-repeat center / contain;
+}
+
+/* Check list rendered on a forest background */
+.check-list--light li {
+  color: rgba(255, 255, 255, 0.92);
+}
+.check-list--light li::before {
+  background: var(--color-forest-300);
+}
+
+/* --------------------------------------------------------------------------
+   LEGAL / PROSE PAGES (Privacy Policy, Terms)
+   -------------------------------------------------------------------------- */
+.prose-legal h2 {
+  font-size: 1.35rem;
+  margin-top: 2.5rem;
+  margin-bottom: 0.75rem;
+}
+.prose-legal h3 {
+  font-size: 1.05rem;
+  margin-top: 1.5rem;
+  margin-bottom: 0.5rem;
+  color: var(--color-charcoal);
+}
+.prose-legal p,
+.prose-legal li {
+  color: var(--color-charcoal-600);
+  margin-bottom: 0.85rem;
+}
+.prose-legal ul {
+  list-style: disc;
+  padding-left: 1.4rem;
+  margin-bottom: 1rem;
+}
+.prose-legal a {
+  color: var(--color-grass-600);
+  text-decoration: underline;
+  font-weight: 600;
+}
+.prose-legal a:hover {
+  color: var(--color-forest);
+}
+
+/* Callout box for the required mobile-data clause */
+.legal-callout {
+  border-left: 4px solid var(--color-grass);
+  background: var(--color-sand-100);
+  border-radius: 0 var(--radius) var(--radius) 0;
+  padding: 1.1rem 1.25rem;
+  margin: 1.25rem 0;
+}
+.legal-callout p {
+  margin: 0;
+  color: var(--color-charcoal);
+}
+
+/* ==========================================================================
+   MOTION LAYER
+   Progressive enhancement: the "hidden" start state applies ONLY when JS is on
+   AND motion is allowed (html.motion-safe, set by an inline head script).
+   Without JS, or with prefers-reduced-motion, everything renders fully visible.
+   ========================================================================== */
+
+html.motion-safe [data-reveal] {
+  opacity: 0;
+  transform: translateY(24px);
+  transition:
+    opacity 0.7s ease,
+    transform 0.7s cubic-bezier(0.2, 0.7, 0.2, 1);
+  transition-delay: var(--reveal-delay, 0ms);
+  will-change: opacity, transform;
+}
+html.motion-safe [data-reveal='left'] {
+  transform: translateX(-24px);
+}
+html.motion-safe [data-reveal='right'] {
+  transform: translateX(24px);
+}
+html.motion-safe [data-reveal='zoom'] {
+  transform: scale(0.95);
+}
+html.motion-safe [data-reveal].is-visible {
+  opacity: 1;
+  transform: none;
+}
+
+/* Hero Ken-Burns drift */
+@keyframes kenburns {
+  0% {
+    transform: scale(1.05);
+  }
+  100% {
+    transform: scale(1.14) translateY(-1.5%);
+  }
+}
+html.motion-safe .kenburns {
+  animation: kenburns 24s ease-out forwards alternate;
+}
+
+/* Header shrink on scroll */
+.site-header {
+  transition: box-shadow 0.25s ease, background-color 0.25s ease;
+}
+.site-header.scrolled {
+  box-shadow: 0 6px 24px -14px rgba(0, 0, 0, 0.5);
+}
+.site-header.scrolled .site-header__inner {
+  padding-top: 0.45rem;
+  padding-bottom: 0.45rem;
+}
+
+/* Animated nav underline */
+.nav-link {
+  position: relative;
+}
+.nav-link::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: -5px;
+  height: 2px;
+  width: 100%;
+  background: var(--color-grass);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.22s ease;
+}
+.nav-link:hover::after,
+.nav-link[aria-current='page']::after {
+  transform: scaleX(1);
+}
+
+/* Arrow nudge on card hover */
+.nudge {
+  transition: transform 0.18s ease;
+}
+.group:hover .nudge {
+  transform: translateX(4px);
+}
+
+/* Image frame with hover zoom */
+.img-frame {
+  overflow: hidden;
+  border-radius: var(--radius);
+  background: var(--color-sand-200);
+}
+.img-frame img {
+  transition: transform 0.5s ease;
+}
+.group:hover .img-frame img,
+.img-frame:hover img {
+  transform: scale(1.05);
+}
+
+/* ==========================================================================
+   BEFORE / AFTER COMPARISON SLIDER
+   Two real photos; the "before" is revealed by a draggable divider. The range
+   input on top keeps it keyboard-accessible for free.
+   ========================================================================== */
+/* A fixed aspect box, with BOTH photos cropped to fill it. Stock and real job
+   photos never share an aspect ratio, and letting the "after" dictate the frame
+   height makes the pair read as two unrelated images. Normalising here means a
+   drop-in replacement photo of any shape still lines up. */
+.ba__frame {
+  position: relative;
+  --pos: 50%;
+  aspect-ratio: 4 / 3;
+  touch-action: none;
+  user-select: none;
+  overflow: hidden;
+  border-radius: var(--radius);
+}
+.ba__img {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.ba__before-wrap {
+  position: absolute;
+  inset: 0;
+  clip-path: inset(0 calc(100% - var(--pos)) 0 0);
+}
+.ba__before {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.ba__tag {
+  position: absolute;
+  top: 0.75rem;
+  z-index: 3;
+  border-radius: 3px;
+  padding: 0.2rem 0.55rem;
+  font-size: 0.6rem;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  background: rgba(27, 67, 50, 0.85);
+  color: #fff;
+  pointer-events: none;
+}
+.ba__tag--before {
+  left: 0.75rem;
+}
+.ba__tag--after {
+  right: 0.75rem;
+  background: rgba(43, 138, 62, 0.92);
+}
+.ba__divider {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: var(--pos);
+  z-index: 4;
+  width: 3px;
+  transform: translateX(-1.5px);
+  background: #fff;
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.4);
+  pointer-events: none;
+}
+.ba__handle {
+  position: absolute;
+  top: 50%;
+  left: var(--pos);
+  z-index: 4;
+  transform: translate(-50%, -50%);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 2.6rem;
+  width: 2.6rem;
+  border-radius: 999px;
+  background: #fff;
+  color: var(--color-forest);
+  box-shadow: 0 4px 14px -3px rgba(0, 0, 0, 0.5);
+  pointer-events: none;
+}
+.ba__handle svg:first-child {
+  transform: rotate(180deg);
+  margin-right: -3px;
+}
+.ba__range {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  opacity: 0;
+  cursor: ew-resize;
+}
+.ba__frame:focus-within .ba__handle {
+  box-shadow: 0 0 0 3px var(--color-grass), 0 4px 14px -3px rgba(0, 0, 0, 0.5);
+}

@@ -1,0 +1,213 @@
+---
+/**
+ * Privacy Policy — dedicated page, linked separately in the footer and below
+ * every form's consent checkboxes.
+ *
+ * 🚨 The MOBILE_DATA_CLAUSE is rendered VERBATIM below. Carriers pattern-match
+ * that exact sentence — do not paraphrase it, reflow it, or split it across
+ * elements. It lives in business.ts so it can't drift.
+ *
+ * NOTE: this is a solid, honest starting policy that reflects what the site
+ * actually does. It is not legal advice; have counsel review it before launch.
+ */
+import BaseLayout from '@layouts/BaseLayout.astro';
+import PageHero from '@components/PageHero.astro';
+import {
+  BUSINESS,
+  MOBILE_DATA_CLAUSE,
+  addressOneLine,
+  telHref,
+  mailHref,
+} from '@data/business';
+
+// Single "last updated" stamp, rendered in both the intro and the footer line.
+const LAST_UPDATED = 'July 16, 2026';
+---
+
+<BaseLayout
+  title={`Privacy Policy | ${BUSINESS.legalName}`}
+  description={`How Mateo Landscaping and More LLC collects, uses and protects your personal information, including SMS and mobile opt-in data.`}
+  path="/privacy-policy"
+>
+  <PageHero eyebrow="Legal" title="Privacy Policy" crumb="Privacy Policy" />
+
+  <section class="py-16">
+    <div class="container-page">
+      <div class="prose-legal mx-auto max-w-3xl">
+        <p class="text-sm text-[color:var(--color-slate-soft)]">Last updated: {LAST_UPDATED}</p>
+
+        <p>
+          This Privacy Policy explains how <strong>{BUSINESS.legalName}</strong> (“we,” “us,” or
+          “our”) collects, uses, and protects your information when you visit our website, contact
+          us, request an estimate, or receive text messages from us.
+        </p>
+        <p>
+          We are a family-owned landscaping and home services company based in {BUSINESS.homeCity},{' '}
+          {BUSINESS.homeStateFull}. We are not in the business of selling data, and we do not sell yours.
+        </p>
+
+        {/* ---------------- Mobile / SMS — the section carriers read ---------------- */}
+        <h2>Text messaging &amp; mobile information</h2>
+        <p>
+          If you check one or both of the optional consent boxes on a form on this website, you are
+          giving us your express written consent to send you text messages at the mobile number you
+          provided. The two consents are separate and independent:
+        </p>
+        <ul>
+          <li>
+            <strong>Transactional messages</strong> — reminders, appointment confirmations, and
+            service updates related to work you have requested from us.
+          </li>
+          <li>
+            <strong>Marketing and promotional messages</strong> — special offers, discounts, and
+            seasonal service reminders.
+          </li>
+        </ul>
+        <p>
+          Both consent boxes are optional and are unchecked by default. You are not required to agree
+          to receive text messages in order to submit a form, request an estimate, or hire us —
+          consent to marketing messages is never a condition of purchase.
+        </p>
+        <p>
+          Message frequency may vary. Message and data rates may apply. Reply <strong>HELP</strong>{' '}
+          for help or <strong>STOP</strong> to opt out at any time. Opting out of text messages does
+          not affect your ability to work with us by phone or email.
+        </p>
+
+        <h3>How we share mobile information</h3>
+        {/*
+          ⚠️ MOBILE_DATA_CLAUSE — rendered verbatim from business.ts.
+          Carriers look for this exact sentence. Do not reword.
+        */}
+        <div class="legal-callout">
+          <p>{MOBILE_DATA_CLAUSE}</p>
+        </div>
+
+        {/* ---------------- Everything else ---------------- */}
+        <h2>Information we collect</h2>
+        <p>We only collect what we need in order to quote and do the work:</p>
+        <ul>
+          <li>
+            <strong>Information you give us.</strong> Your name, phone number, email address, the
+            service you're interested in, and anything you write in the message field of a form.
+          </li>
+          <li>
+            <strong>Consent records.</strong> Whether you checked each consent box, along with the
+            date and time and the page you submitted from. We keep this as proof of how and when
+            consent was given.
+          </li>
+          <li>
+            <strong>Job information.</strong> Your service address and details about the property,
+            which you provide so that we can quote and complete the work.
+          </li>
+          <li>
+            <strong>Basic technical information.</strong> Standard server and analytics data such as
+            your browser type and the pages you visited.
+          </li>
+        </ul>
+
+        <h2>How we use your information</h2>
+        <ul>
+          <li>To respond to your enquiry and prepare your free estimate.</li>
+          <li>To schedule, perform, and follow up on work you have hired us to do.</li>
+          <li>To send transactional messages, if you consented to receive them.</li>
+          <li>To send marketing and promotional messages, if you separately consented to those.</li>
+          <li>To keep our records, handle billing, and meet our legal obligations.</li>
+        </ul>
+
+        <h2>How we share your information</h2>
+        <p>
+          <strong>We do not sell your personal information.</strong> We share it only in these
+          limited situations:
+        </p>
+        <ul>
+          <li>
+            <strong>Service providers.</strong> Vendors who help us run the business — for example,
+            our customer relationship management platform, our messaging provider, and our website
+            host. They may only use your information to provide services to us.
+          </li>
+          <li>
+            <strong>Subcontractors.</strong> Where a subcontractor is performing part of the work or
+            supporting customer service, they receive only what they need to do that job.
+          </li>
+          <li>
+            <strong>Legal requirements.</strong> Where we are required to disclose information by law,
+            subpoena, or other legal process, or to protect our rights or someone's safety.
+          </li>
+        </ul>
+        <p>
+          As stated above, mobile opt-in data and consent are excluded from all sharing beyond what
+          that clause permits.
+        </p>
+
+        <h2>Data retention</h2>
+        <p>
+          We keep your information for as long as we need it for the purposes described here —
+          typically for the duration of our working relationship and afterwards as required for tax,
+          warranty, and legal recordkeeping. Consent records are retained for as long as we message
+          you and for a reasonable period afterwards, so that we can demonstrate consent was given.
+        </p>
+
+        <h2>Your choices</h2>
+        <ul>
+          <li>
+            <strong>Text messages.</strong> Reply STOP to any message to opt out, or contact us
+            directly and we'll remove you.
+          </li>
+          <li>
+            <strong>Email.</strong> Use the unsubscribe link in any marketing email, or just ask us.
+          </li>
+          <li>
+            <strong>Access, correction, and deletion.</strong> Contact us to see what we hold about
+            you, correct it, or ask us to delete it. We'll honour reasonable requests promptly and
+            within the time the law requires.
+          </li>
+        </ul>
+
+        <h2>Security</h2>
+        <p>
+          This website is served over HTTPS, and we use reasonable administrative and technical
+          safeguards to protect the information we hold. No method of transmission or storage is
+          perfectly secure, and we won't claim otherwise — but we treat your information carefully
+          and limit who can see it.
+        </p>
+
+        <h2>Children's privacy</h2>
+        <p>
+          Our services are directed at homeowners and property owners. We do not knowingly collect
+          personal information from children under 13. If you believe a child has given us
+          information, contact us and we will delete it.
+        </p>
+
+        <h2>Third-party links</h2>
+        <p>
+          Our site may link to other websites, such as a map provider or a social media page. We are
+          not responsible for the privacy practices of sites we do not operate — please read their
+          policies.
+        </p>
+
+        <h2>Changes to this policy</h2>
+        <p>
+          If we change this policy, we will post the updated version on this page and revise the
+          “last updated” date above. Material changes to how we handle text messaging consent will
+          not be applied retroactively to consent you have already given.
+        </p>
+
+        <h2>Contact us</h2>
+        <p>Questions about this policy, or about information we hold about you:</p>
+        <ul>
+          <li><strong>{BUSINESS.legalName}</strong></li>
+          <li>{addressOneLine}</li>
+          <li>Phone: <a href={telHref}>{BUSINESS.phoneDisplay}</a></li>
+          <li>Email: <a href={mailHref}>{BUSINESS.email}</a></li>
+        </ul>
+
+        <hr class="rule-sand my-10" />
+        <p class="text-sm text-[color:var(--color-slate-soft)]">
+          &copy; {new Date().getFullYear()} {BUSINESS.legalName}. This policy was last updated on{' '}
+          {LAST_UPDATED}.
+        </p>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

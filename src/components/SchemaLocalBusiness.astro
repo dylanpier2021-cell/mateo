@@ -1,0 +1,108 @@
+---
+/**
+ * <SchemaLocalBusiness /> — site-wide LocalBusiness JSON-LD, rendered once per
+ * page via BaseLayout so every URL carries consistent NAP + areaServed.
+ *
+ * NAP here reads from the same constants as the visible page, so structured
+ * data can never disagree with the rendered text — which is exactly the kind of
+ * inconsistency that gets an A2P campaign kicked back.
+ */
+import {
+  SITE,
+  BUSINESS,
+  SAME_AS,
+  SERVICE_AREA_NAMES,
+  SERVICES,
+  PLACEHOLDER_STREET,
+  PLACEHOLDER_PHONE_E164,
+} from '@data/business';
+
+interface Props {
+  areaServed?: readonly string[];
+  path?: string;
+}
+
+const { areaServed = SERVICE_AREA_NAMES } = Astro.props;
+
+const address: Record<string, string> = {
+  '@type': 'PostalAddress',
+  addressLocality: BUSINESS.address.city,
+  addressRegion: BUSINESS.address.state,
+  postalCode: BUSINESS.address.zip,
+  addressCountry: BUSINESS.address.country,
+};
+// Emit the street only once it's real — publishing "[STREET ADDRESS]" as
+// structured data is worse than omitting the field.
+if (BUSINESS.address.street !== PLACEHOLDER_STREET) {
+  address.streetAddress = BUSINESS.address.street;
+}
+
+const schema: Record<string, unknown> = {
+  '@context': 'https://schema.org',
+  '@type': ['LandscapingBusiness', 'HomeAndConstructionBusiness', 'LocalBusiness'],
+  '@id': `${SITE.url}/#business`,
+  name: BUSINESS.name,
+  legalName: BUSINESS.legalName,
+  description: `Landscaping, fencing, decks and handyman services in Champaign, Illinois. Family-owned, ${BUSINESS.yearsInBusiness} years in business, free estimates, warrantied work, bilingual English and Spanish.`,
+  url: SITE.url,
+  email: BUSINESS.email,
+  image: new URL(SITE.ogImage, SITE.url).href,
+  logo: new URL('/favicon.svg', SITE.url).href,
+  priceRange: BUSINESS.priceRange,
+  currenciesAccepted: BUSINESS.currency,
+  slogan: BUSINESS.tagline,
+  knowsLanguage: BUSINESS.languages,
+  foundingDate: String(BUSINESS.foundedYear),
+  address,
+  geo: {
+    '@type': 'GeoCoordinates',
+    latitude: BUSINESS.geo.lat,
+    longitude: BUSINESS.geo.lng,
+  },
+  areaServed: areaServed.map((city) => ({
+    '@type': 'City',
+    name: `${city}, ${BUSINESS.homeState}`,
+  })),
+  openingHoursSpecification: [
+    {
+      '@type': 'OpeningHoursSpecification',
+      dayOfWeek: BUSINESS.hours.days,
+      opens: BUSINESS.hours.opens,
+      closes: BUSINESS.hours.closes,
+    },
+  ],
+  makesOffer: SERVICES.map((s) => ({
+    '@type': 'Offer',
+    itemOffered: {
+      '@type': 'Service',
+      name: s.name,
+      url: `${SITE.url}/services#${s.slug}`,
+    },
+  })),
+  hasOfferCatalog: {
+    '@type': 'OfferCatalog',
+    name: 'Landscaping & Home Services',
+    itemListElement: SERVICES.map((s) => ({
+      '@type': 'Offer',
+      itemOffered: { '@type': 'Service', name: s.name },
+    })),
+  },
+};
+
+// Only publish a phone once it's a real, dialable number.
+if (BUSINESS.phoneE164 !== PLACEHOLDER_PHONE_E164) {
+  schema.telephone = BUSINESS.phoneE164;
+  schema.contactPoint = {
+    '@type': 'ContactPoint',
+    contactType: 'customer service',
+    telephone: BUSINESS.phoneE164,
+    email: BUSINESS.email,
+    availableLanguage: BUSINESS.languages,
+  };
+}
+
+// `sameAs` is omitted entirely when there are no verified profiles yet.
+if (SAME_AS.length > 0) schema.sameAs = SAME_AS;
+---
+
+<script type="application/ld+json" is:inline set:html={JSON.stringify(schema)} />

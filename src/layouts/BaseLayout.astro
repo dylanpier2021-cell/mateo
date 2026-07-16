@@ -1,0 +1,85 @@
+---
+/**
+ * <BaseLayout /> — the HTML shell for every page: head SEO, site-wide
+ * LocalBusiness schema, skip link, header, <main>, footer.
+ *
+ * Use the `head` slot for page-specific JSON-LD (Service, FAQPage, Breadcrumb).
+ */
+import '@/styles/global.css';
+import { ClientRouter } from 'astro:transitions';
+import { SITE, BUSINESS } from '@data/business';
+import Seo from '@components/Seo.astro';
+import SchemaLocalBusiness from '@components/SchemaLocalBusiness.astro';
+import Header from '@components/Header.astro';
+import Footer from '@components/Footer.astro';
+
+interface Props {
+  title: string;
+  description: string;
+  /** Path only, e.g. "/services". Drives canonical / og:url. */
+  path: string;
+  image?: string;
+  ogType?: 'website' | 'article' | 'business.business';
+  noindex?: boolean;
+  /** Preload a hero image for LCP (absolute path from site root). */
+  preloadImage?: string;
+}
+
+const { title, description, path, image, ogType, noindex, preloadImage } = Astro.props;
+---
+
+<!doctype html>
+<html lang={SITE.lang}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#1b4332" />
+
+    {/* Runs before paint: opts into JS-only reveal states, and only when the
+        user hasn't asked to reduce motion. No layout shift. */}
+    <script is:inline>
+      (function () {
+        var d = document.documentElement;
+        d.classList.add('js');
+        try {
+          if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+            d.classList.add('motion-safe');
+          }
+        } catch (e) {}
+      })();
+    </script>
+
+    <ClientRouter />
+
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/favicon.svg" />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+    <meta name="author" content={BUSINESS.legalName} />
+    <meta name="generator" content={Astro.generator} />
+
+    {preloadImage && <link rel="preload" as="image" href={preloadImage} fetchpriority="high" />}
+
+    <Seo title={title} description={description} path={path} image={image} ogType={ogType} noindex={noindex} />
+    <SchemaLocalBusiness path={path} />
+
+    {/* Page-specific JSON-LD */}
+    <slot name="head" />
+  </head>
+
+  <body class="flex min-h-screen flex-col">
+    <a href="#main" class="skip-link">Skip to content</a>
+
+    <Header transition:persist />
+
+    <main id="main" class="flex-1">
+      <slot />
+    </main>
+
+    <Footer />
+
+    <script>
+      import '../scripts/motion.ts';
+      import '../scripts/form.ts';
+    </script>
+  </body>
+</html>

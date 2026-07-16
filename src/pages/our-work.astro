@@ -1,0 +1,147 @@
+---
+/**
+ * Our Work — before/after sliders plus the project photo grid.
+ */
+import BaseLayout from '@layouts/BaseLayout.astro';
+import PageHero from '@components/PageHero.astro';
+import BeforeAfter from '@components/BeforeAfter.astro';
+import CtaBand from '@components/CtaBand.astro';
+import Icon from '@components/Icon.astro';
+import { BUSINESS, GALLERY, BEFORE_AFTER, SERVICES, PHOTOS_ARE_STOCK } from '@data/business';
+---
+
+<BaseLayout
+  title={`Our Work — Landscaping, Fence & Deck Projects in Champaign, IL | ${BUSINESS.legalName}`}
+  description="Before-and-after photos and examples of the landscaping, fencing, deck and handyman work we do around Champaign, Urbana, Savoy and Mahomet, Illinois."
+  path="/our-work"
+>
+  <PageHero
+    eyebrow="Our work"
+    title="See the difference for yourself"
+    intro="Yards reset, fences set straight, decks built. Drag the slider to see the before."
+    crumb="Our Work"
+  />
+
+  {
+    PHOTOS_ARE_STOCK && (
+      /* Honest disclosure while the site runs on stock photography. Claiming
+         these are Mateo's completed jobs would mislead homeowners who hire on
+         the strength of them. Drop real job photos into the same paths and set
+         PHOTOS_ARE_STOCK = false in business.ts — this notice removes itself. */
+      <div class="container-page pt-10">
+        <div class="flex items-start gap-3 rounded-md border-2 border-dashed border-[color:var(--color-sand)] bg-[color:var(--color-sand-100)] p-5">
+          <span class="mt-0.5 shrink-0 text-[color:var(--color-charcoal-600)]">
+            <Icon name="file-text" size={20} />
+          </span>
+          <div class="text-sm text-[color:var(--color-charcoal-600)]">
+            <p class="font-bold text-[color:var(--color-charcoal)]">
+              Placeholder photography — replace before launch
+            </p>
+            <p class="mt-1">
+              The photos on this page are licensed stock images that illustrate the kind of work we
+              do — they are not photographs of our own completed jobs. Replace them with real project
+              photos (same file paths under{' '}
+              <code class="rounded bg-white px-1.5 py-0.5 text-xs">public/images/</code>) and set{' '}
+              <code class="rounded bg-white px-1.5 py-0.5 text-xs">PHOTOS_ARE_STOCK = false</code> in{' '}
+              <code class="rounded bg-white px-1.5 py-0.5 text-xs">src/data/business.ts</code>. Until
+              then this notice stays up, because presenting stock photos as your own work would
+              mislead the homeowners deciding whether to hire you.
+            </p>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+  {/* ===================== BEFORE / AFTER ===================== */}
+  <section class="py-16 sm:py-20" aria-labelledby="ba-heading">
+    <div class="container-page">
+      <div class="max-w-2xl" data-reveal>
+        <p class="eyebrow">Before &amp; after</p>
+        <h2 id="ba-heading" class="mt-2 text-3xl font-black sm:text-4xl">Drag to compare</h2>
+        <p class="mt-4 text-[color:var(--color-charcoal-600)]">
+          What a cleanup or a fresh planting actually changes. Grab the handle and pull it across.
+        </p>
+      </div>
+
+      <div class="mt-10 grid gap-8 lg:grid-cols-2">
+        {
+          BEFORE_AFTER.map((item, i) => (
+            <div data-reveal style={`--reveal-delay:${i * 110}ms`}>
+              <BeforeAfter item={item} />
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  {/* ===================== PROJECT GRID ===================== */}
+  <section class="bg-sand-tint py-16 sm:py-20" aria-labelledby="grid-heading">
+    <div class="container-page">
+      <div class="max-w-2xl" data-reveal>
+        <p class="eyebrow">The work we do</p>
+        <h2 id="grid-heading" class="mt-2 text-3xl font-black sm:text-4xl">Around Champaign–Urbana</h2>
+        <p class="mt-4 text-[color:var(--color-charcoal-600)]">
+          From weekly mowing to a fence line or a full deck — here's the range of what we take on
+          across the area.
+        </p>
+      </div>
+
+      <div class="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+        {
+          GALLERY.map((item, i) => (
+            <figure class="group card overflow-hidden" data-reveal="zoom" style={`--reveal-delay:${i * 70}ms`}>
+              <div class="img-frame !rounded-none">
+                <img
+                  src={item.src}
+                  alt={item.alt}
+                  class="h-60 w-full object-cover"
+                  width="700"
+                  height="525"
+                  loading="lazy"
+                  decoding="async"
+                />
+              </div>
+              <figcaption class="flex items-center justify-between gap-3 p-4">
+                <span class="font-bold text-[color:var(--color-forest)]">{item.caption}</span>
+                <span class="shrink-0 rounded-full bg-[color:var(--color-sand-100)] px-2.5 py-1 text-[0.65rem] font-bold uppercase tracking-wider text-[color:var(--color-grass-600)]">
+                  {item.tag}
+                </span>
+              </figcaption>
+            </figure>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  {/* ===================== SERVICE JUMP ===================== */}
+  <section class="py-16" aria-labelledby="explore-heading">
+    <div class="container-page">
+      <h2 id="explore-heading" class="text-center text-2xl font-black sm:text-3xl">Looking for something specific?</h2>
+      <div class="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        {
+          SERVICES.map((s, i) => (
+            <a
+              href={`/services#${s.slug}`}
+              class="group card flex items-center gap-3 p-5"
+              data-reveal
+              style={`--reveal-delay:${i * 60}ms`}
+            >
+              <span class="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-md bg-[color:var(--color-sand-100)] text-[color:var(--color-grass)]">
+                <Icon name={s.icon} size={19} />
+              </span>
+              <span class="flex-1 font-bold text-[color:var(--color-forest)]">{s.name}</span>
+              <span class="nudge text-[color:var(--color-grass-600)]">
+                <Icon name="arrow-right" size={16} />
+              </span>
+            </a>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <CtaBand heading="Want your yard on this page?" body="Tell us what you're picturing. We'll come out, look at the space, and give you a free estimate on what it takes to get there." />
+</BaseLayout>

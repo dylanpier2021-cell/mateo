@@ -1,0 +1,76 @@
+---
+/**
+ * FAQ — the questions homeowners actually ask before hiring, answered plainly.
+ * <Faq /> emits the FAQPage JSON-LD.
+ */
+import BaseLayout from '@layouts/BaseLayout.astro';
+import PageHero from '@components/PageHero.astro';
+import Faq from '@components/Faq.astro';
+import CtaBand from '@components/CtaBand.astro';
+import Icon from '@components/Icon.astro';
+import { BUSINESS, FAQS, telHref, mailHref } from '@data/business';
+---
+
+<BaseLayout
+  title={`FAQ — Free Estimates, Service Areas & Insurance | ${BUSINESS.legalName}`}
+  description="Answers to common questions about Mateo Landscaping and More LLC: free estimates, service areas around Champaign–Urbana, insurance, start times, warranty and how to get a quote."
+  path="/faq"
+>
+  <PageHero
+    eyebrow="FAQ"
+    title="Questions, answered straight"
+    intro="The things homeowners ask us before they hire — and the honest answers."
+    crumb="FAQ"
+  />
+
+  <section class="py-16 sm:py-20">
+    <div class="container-page">
+      <div class="grid gap-12 lg:grid-cols-[1.6fr_1fr] lg:gap-16">
+        <div data-reveal>
+          <Faq faqs={FAQS} heading="Frequently asked questions" />
+        </div>
+
+        {/* Sidebar — a way out for anything not covered above */}
+        <aside class="lg:sticky lg:top-28 lg:self-start" data-reveal="right">
+          <div class="card p-6">
+            <h2 class="text-xl font-black">Still have a question?</h2>
+            <p class="mt-3 text-[color:var(--color-charcoal-600)]">
+              Ask us directly. You'll get a real answer from a real person, usually the same day.
+            </p>
+
+            <div class="mt-6 flex flex-col gap-3">
+              <a href={telHref} class="btn-cta w-full">
+                <Icon name="phone" size={17} />
+                {BUSINESS.phoneDisplay}
+              </a>
+              <a href="/get-a-free-quote" class="btn-outline w-full">Get a Free Quote</a>
+            </div>
+
+            <hr class="rule-sand my-6" />
+
+            <dl class="space-y-4 text-sm">
+              <div>
+                <dt class="font-bold text-[color:var(--color-forest)]">Email</dt>
+                <dd class="mt-0.5">
+                  <a href={mailHref} class="text-[color:var(--color-grass-600)] underline">{BUSINESS.email}</a>
+                </dd>
+              </div>
+              <div>
+                <dt class="font-bold text-[color:var(--color-forest)]">Hours</dt>
+                <dd class="mt-0.5 text-[color:var(--color-charcoal-600)]">{BUSINESS.hours.display}</dd>
+              </div>
+              <div>
+                <dt class="font-bold text-[color:var(--color-forest)]">Se habla español</dt>
+                <dd class="mt-0.5 text-[color:var(--color-charcoal-600)]">
+                  Llámanos y con gusto te atendemos en español.
+                </dd>
+              </div>
+            </dl>
+          </div>
+        </aside>
+      </div>
+    </div>
+  </section>
+
+  <CtaBand />
+</BaseLayout>

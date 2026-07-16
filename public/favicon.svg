@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Mateo Landscaping &amp; More">
+  <rect width="64" height="64" rx="12" fill="#1B4332" />
+  <g fill="none" stroke="#74C69D" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M32 50a19 19 0 0 1-3.3-38.2c15.5-3 19.6-4.4 25-11.1 2.7 5.4 5.4 10.9 5.4 21.8 0 15-13 27.5-27.1 27.5Z" transform="translate(-2 4) scale(0.82)" />
+    <path d="M8 56c0-8.2 5-14.6 13.8-16.4C28.4 38.4 35.2 34.3 38 31" />
+  </g>
+</svg>

@@ -1,0 +1,146 @@
+---
+/**
+ * Services — one section per service, each with its own heading, photo and
+ * itemised list, plus the transparent pricing note.
+ */
+import BaseLayout from '@layouts/BaseLayout.astro';
+import PageHero from '@components/PageHero.astro';
+import CtaBand from '@components/CtaBand.astro';
+import Icon from '@components/Icon.astro';
+import { SITE, BUSINESS, SERVICES, PRICING_NOTE, serviceAreaLine } from '@data/business';
+
+// Service JSON-LD — one entry per section on this page.
+const schema = {
+  '@context': 'https://schema.org',
+  '@type': 'ItemList',
+  itemListElement: SERVICES.map((s, i) => ({
+    '@type': 'ListItem',
+    position: i + 1,
+    item: {
+      '@type': 'Service',
+      name: s.name,
+      description: s.blurb,
+      url: `${SITE.url}/services#${s.slug}`,
+      serviceType: s.name,
+      provider: { '@id': `${SITE.url}/#business` },
+      areaServed: { '@type': 'City', name: `${BUSINESS.homeCity}, ${BUSINESS.homeState}` },
+    },
+  })),
+};
+---
+
+<BaseLayout
+  title={`Landscaping, Fencing, Decks & Handyman Services | ${BUSINESS.legalName}`}
+  description="Lawn care and landscaping, fence installation and repair, custom decks, and handyman and remodeling work in Champaign, Urbana, Savoy and Mahomet, IL. Free, no-obligation estimates."
+  path="/services"
+>
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(schema)} slot="head" />
+
+  <PageHero
+    eyebrow="Our services"
+    title="Everything we do, inside and out"
+    intro="Four services, one local crew, one number to call. Here's exactly what each one covers — and what it costs to find out."
+    crumb="Services"
+  />
+
+  {/* Jump links — a long page needs a way in */}
+  <nav aria-label="Services on this page" class="border-b border-[color:var(--color-line)] bg-[color:var(--color-sand-100)]">
+    <div class="container-page flex flex-wrap gap-2 py-4">
+      {
+        SERVICES.map((s) => (
+          <a
+            href={`#${s.slug}`}
+            class="inline-flex items-center gap-1.5 rounded-full border border-[color:var(--color-line)] bg-white px-3.5 py-1.5 text-sm font-semibold text-[color:var(--color-forest)] transition-colors hover:border-[color:var(--color-grass)] hover:text-[color:var(--color-grass)]"
+          >
+            <Icon name={s.icon} size={15} />
+            {s.name}
+          </a>
+        ))
+      }
+    </div>
+  </nav>
+
+  {/* One section per service, alternating image side */}
+  {
+    SERVICES.map((s, i) => (
+      <section
+        id={s.slug}
+        aria-labelledby={`${s.slug}-heading`}
+        class:list={['scroll-mt-24 py-16 sm:py-20', i % 2 === 1 && 'bg-sand-tint']}
+      >
+        <div class="container-page">
+          <div class="grid items-center gap-10 lg:grid-cols-2 lg:gap-14">
+            <div class:list={[i % 2 === 1 && 'lg:order-2']} data-reveal={i % 2 === 1 ? 'right' : 'left'}>
+              <div class="img-frame">
+                <img
+                  src={s.image}
+                  alt={s.imageAlt}
+                  class="aspect-[4/3] w-full object-cover"
+                  width="900"
+                  height="675"
+                  loading="lazy"
+                  decoding="async"
+                />
+              </div>
+            </div>
+
+            <div data-reveal={i % 2 === 1 ? 'left' : 'right'}>
+              <span class="inline-flex h-12 w-12 items-center justify-center rounded-md bg-[color:var(--color-forest)] text-[color:var(--color-forest-300)]">
+                <Icon name={s.icon} size={24} />
+              </span>
+
+              <h2 id={`${s.slug}-heading`} class="mt-5 text-3xl font-black sm:text-4xl">
+                {s.name}
+              </h2>
+
+              <p class="mt-4 text-lg text-[color:var(--color-charcoal-600)]">{s.body}</p>
+
+              <h3 class="mt-8 text-sm font-bold uppercase tracking-[0.14em] text-[color:var(--color-grass)]">
+                What's included
+              </h3>
+              <ul class="check-list mt-4">
+                {s.includes.map((line) => (
+                  <li>{line}</li>
+                ))}
+              </ul>
+
+              <a href="/get-a-free-quote" class="btn-cta mt-8">
+                <Icon name="send" size={17} />
+                Get a free estimate
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
+    ))
+  }
+
+  {/* ===================== PRICING NOTE ===================== */}
+  <section class="py-16" aria-labelledby="pricing-heading">
+    <div class="container-page">
+      <div class="card p-8 sm:p-12" data-reveal>
+        <div class="flex flex-col gap-5 sm:flex-row sm:items-start">
+          <span class="shrink-0 text-[color:var(--color-grass)]">
+            <Icon name="receipt" size={32} />
+          </span>
+          <div>
+            <h2 id="pricing-heading" class="text-2xl font-black sm:text-3xl">What does it cost?</h2>
+            <p class="mt-4 text-lg font-semibold text-[color:var(--color-forest)]">{PRICING_NOTE}</p>
+            <p class="mt-4 max-w-2xl text-[color:var(--color-charcoal-600)]">
+              We don't publish a price list, and we'd be suspicious of anyone in this trade who does.
+              A quarter-acre lot with mature trees is not the same job as a small city yard, and a
+              60-foot fence on flat ground is not the same job as one on a slope. So we come out, look
+              at the actual work, and give you a real number — not a range that doubles once we start.
+            </p>
+            <p class="mt-4 max-w-2xl text-[color:var(--color-charcoal-600)]">
+              The estimate is free, there's no obligation, and nobody is going to pressure you at your
+              front door. {serviceAreaLine}
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <CtaBand heading="Not sure which service you need?" body="Describe the job in a sentence or two and we'll tell you what it takes — or tell you honestly if it isn't something we do." />
+</BaseLayout>

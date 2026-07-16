@@ -1,0 +1,154 @@
+---
+/**
+ * <Footer /> — appears on every page and carries the full NAP block.
+ *
+ * A2P reviewers look here for: business name, physical address, phone, branded
+ * email, links to every page, and SEPARATE links to the Privacy Policy and the
+ * Terms & Conditions. All of it reads from business.ts, so it matches the rest
+ * of the site and the campaign registration exactly.
+ */
+import {
+  BUSINESS,
+  SOCIAL,
+  NAV,
+  LEGAL_NAV,
+  SERVICES,
+  telHref,
+  mailHref,
+  mapsHref,
+  addressOneLine,
+  serviceAreaLine,
+  PLACEHOLDER_FACEBOOK,
+} from '@data/business';
+import Icon from './Icon.astro';
+
+const year = new Date().getFullYear();
+const pageLinks = NAV.filter((item) => item.href !== '/');
+const facebookIsPlaceholder = SOCIAL.facebook === PLACEHOLDER_FACEBOOK;
+---
+
+<footer class="mt-24 border-t-4 border-[color:var(--color-grass)] bg-[color:var(--color-forest)] text-white">
+  <div class="container-page py-14">
+    <div class="grid gap-10 md:grid-cols-2 lg:grid-cols-4">
+      {/* Brand + NAP — must match the A2P registration exactly */}
+      <div>
+        <p class="text-lg font-black tracking-tight text-white">{BUSINESS.legalName}</p>
+        <p class="mt-1 text-xs font-semibold uppercase tracking-[0.16em] text-[color:var(--color-forest-300)]">
+          {BUSINESS.shortBrand}
+        </p>
+        <p class="mt-4 text-sm text-white/75">{BUSINESS.tagline}</p>
+
+        <address class="mt-5 space-y-3 not-italic text-sm">
+          <p class="flex items-start gap-2.5">
+            <span class="mt-0.5 text-[color:var(--color-forest-300)]"><Icon name="map-pin" size={16} /></span>
+            <a href={mapsHref} target="_blank" rel="noopener" class="text-white/90 hover:text-white hover:underline">
+              {addressOneLine}
+            </a>
+          </p>
+          <p class="flex items-center gap-2.5">
+            <span class="text-[color:var(--color-forest-300)]"><Icon name="phone" size={16} /></span>
+            <a href={telHref} class="font-semibold text-white hover:underline">{BUSINESS.phoneDisplay}</a>
+          </p>
+          <p class="flex items-center gap-2.5">
+            <span class="text-[color:var(--color-forest-300)]"><Icon name="mail" size={16} /></span>
+            <a href={mailHref} class="text-white/90 hover:text-white hover:underline">{BUSINESS.email}</a>
+          </p>
+          <p class="flex items-center gap-2.5">
+            <span class="text-[color:var(--color-forest-300)]"><Icon name="clock" size={16} /></span>
+            <span class="text-white/75">{BUSINESS.hours.display}</span>
+          </p>
+        </address>
+      </div>
+
+      {/* Every page — no dead links; reviewers do click these */}
+      <nav aria-label="Footer">
+        <h2 class="text-sm font-bold uppercase tracking-[0.16em] text-[color:var(--color-forest-300)]">Pages</h2>
+        <ul class="mt-4 space-y-2.5 text-sm">
+          <li><a href="/" class="text-white/75 hover:text-white hover:underline">Home</a></li>
+          {
+            pageLinks.map((item) => (
+              <li>
+                <a href={item.href} class="text-white/75 hover:text-white hover:underline">
+                  {item.label}
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </nav>
+
+      {/* Services */}
+      <nav aria-label="Services">
+        <h2 class="text-sm font-bold uppercase tracking-[0.16em] text-[color:var(--color-forest-300)]">Services</h2>
+        <ul class="mt-4 space-y-2.5 text-sm">
+          {
+            SERVICES.map((s) => (
+              <li>
+                <a href={`/services#${s.slug}`} class="text-white/75 hover:text-white hover:underline">
+                  {s.name}
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+        <h2 class="mt-6 text-sm font-bold uppercase tracking-[0.16em] text-[color:var(--color-forest-300)]">
+          Service Area
+        </h2>
+        <p class="mt-3 text-sm text-white/75">{serviceAreaLine}</p>
+      </nav>
+
+      {/* Connect + legal */}
+      <div>
+        <h2 class="text-sm font-bold uppercase tracking-[0.16em] text-[color:var(--color-forest-300)]">Connect</h2>
+        <ul class="mt-4 space-y-2.5 text-sm">
+          <li>
+            {
+              facebookIsPlaceholder ? (
+                /* Placeholder — a dead social link is worse than none, so it is
+                   rendered as inert text until the real page URL exists. */
+                <span class="inline-flex items-center gap-2 text-white/50">
+                  <Icon name="facebook" size={17} /> Facebook
+                  <span class="rounded bg-white/10 px-1.5 py-0.5 text-[0.6rem] font-bold uppercase tracking-wider">
+                    Coming soon
+                  </span>
+                </span>
+              ) : (
+                <a
+                  href={SOCIAL.facebook}
+                  rel="me noopener"
+                  target="_blank"
+                  class="inline-flex items-center gap-2 text-white/75 hover:text-white hover:underline"
+                >
+                  <Icon name="facebook" size={17} /> Facebook
+                </a>
+              )
+            }
+          </li>
+        </ul>
+
+        {/* Separate Privacy / Terms links — a carrier requirement */}
+        <h2 class="mt-6 text-sm font-bold uppercase tracking-[0.16em] text-[color:var(--color-forest-300)]">Legal</h2>
+        <ul class="mt-4 space-y-2.5 text-sm">
+          {
+            LEGAL_NAV.map((item) => (
+              <li>
+                <a href={item.href} class="text-white/75 hover:text-white hover:underline">
+                  {item.label}
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+
+        <a href="/get-a-free-quote" class="btn-cta mt-6 w-full text-sm">Get a Free Quote</a>
+      </div>
+    </div>
+
+    <hr class="my-10 border-0 border-t border-white/15" />
+
+    <div class="flex flex-col gap-3 text-xs text-white/60 md:flex-row md:items-center md:justify-between">
+      <p>&copy; {year} {BUSINESS.legalName}. All rights reserved.</p>
+      <p>Champaign · Urbana · Savoy · Mahomet · Bondville · Tolono, IL</p>
+    </div>
+  </div>
+</footer>

@@ -1,0 +1,53 @@
+---
+/**
+ * <BeforeAfter /> — draggable before/after comparison of two real photos.
+ *
+ * The divider position is driven by a range input layered over the frame, so
+ * it's keyboard-operable and screen-reader-labelled with no extra work. With JS
+ * off it still renders as a static 50/50 split — degraded, not broken.
+ */
+import type { BeforeAfterItem } from '@data/business';
+import Icon from './Icon.astro';
+
+interface Props {
+  item: BeforeAfterItem;
+}
+const { item } = Astro.props;
+---
+
+<figure class="card overflow-hidden">
+  <div class="ba__frame" data-ba>
+    {/* AFTER is the base layer… */}
+    <img class="ba__img" src={item.after} alt={item.afterAlt} width="1200" height="800" loading="lazy" decoding="async" />
+
+    {/* …and BEFORE is clipped over the top of it by --pos */}
+    <div class="ba__before-wrap">
+      <img class="ba__before" src={item.before} alt={item.beforeAlt} width="1200" height="800" loading="lazy" decoding="async" />
+    </div>
+
+    <span class="ba__tag ba__tag--before">Before</span>
+    <span class="ba__tag ba__tag--after">After</span>
+
+    <span class="ba__divider" aria-hidden="true"></span>
+    <span class="ba__handle" aria-hidden="true">
+      <Icon name="chevron-left" size={15} stroke={3} />
+      <Icon name="chevron-right" size={15} stroke={3} />
+    </span>
+
+    <input
+      class="ba__range"
+      type="range"
+      min="0"
+      max="100"
+      value="50"
+      step="1"
+      aria-label={`Reveal the before and after photos of ${item.title}`}
+    />
+  </div>
+
+  <figcaption class="p-5">
+    <p class="text-xs font-bold uppercase tracking-[0.16em] text-[color:var(--color-grass)]">{item.location}</p>
+    <h3 class="mt-1.5 text-lg font-black">{item.title}</h3>
+    <p class="mt-1.5 text-sm text-[color:var(--color-charcoal-600)]">{item.note}</p>
+  </figcaption>
+</figure>

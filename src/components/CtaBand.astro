@@ -1,0 +1,50 @@
+---
+/**
+ * <CtaBand /> — the "Get a Free Quote" band that closes most pages. Every CTA
+ * on the site points at /get-a-free-quote, the registered A2P opt-in URL.
+ */
+import { BUSINESS, telHref, serviceAreaLine } from '@data/business';
+import Icon from './Icon.astro';
+
+interface Props {
+  heading?: string;
+  body?: string;
+  /** Sand tint instead of white — lets adjacent sections alternate. */
+  tint?: boolean;
+}
+
+const {
+  heading = 'Ready for a free estimate?',
+  body = "Tell us what you need and we'll come look at the job — no charge, no obligation, and a straight number when we're done.",
+  tint = true,
+} = Astro.props;
+---
+
+<section class:list={['py-16', tint && 'bg-sand-tint']}>
+  <div class="container-page">
+    <div class="card overflow-hidden">
+      <div class="grid items-center gap-8 p-8 sm:p-12 lg:grid-cols-[1.4fr_1fr]">
+        <div data-reveal>
+          <p class="eyebrow">Free · No obligation</p>
+          <h2 class="mt-2 text-3xl font-black sm:text-4xl">{heading}</h2>
+          <p class="mt-4 max-w-xl text-[color:var(--color-charcoal-600)]">{body}</p>
+          <p class="mt-3 text-sm text-[color:var(--color-slate-soft)]">{serviceAreaLine}</p>
+        </div>
+
+        <div class="flex flex-col gap-3" data-reveal style="--reveal-delay:120ms">
+          <a href="/get-a-free-quote" class="btn-cta w-full text-base">
+            <Icon name="send" size={18} />
+            Get a Free Quote
+          </a>
+          <a href={telHref} class="btn-outline w-full text-base">
+            <Icon name="phone" size={17} />
+            {BUSINESS.phoneDisplay}
+          </a>
+          <p class="text-center text-xs text-[color:var(--color-slate-soft)]">
+            {BUSINESS.hours.display}
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

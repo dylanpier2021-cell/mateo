@@ -1,0 +1,55 @@
+---
+/**
+ * <TestimonialCard /> — a single customer review.
+ *
+ * ⚠️ When `isPlaceholder` is true the card renders a visible "Sample" badge and
+ * a muted style. That is deliberate: presenting invented reviews as if real
+ * customers wrote them deceives homeowners and is an FTC problem for the client.
+ * Replace the text in TESTIMONIALS with real, permissioned reviews and flip
+ * `isPlaceholder` to false — the badge disappears on its own.
+ */
+import type { Testimonial } from '@data/business';
+import Icon from './Icon.astro';
+
+interface Props {
+  testimonial: Testimonial;
+}
+const { testimonial: t } = Astro.props;
+---
+
+<figure class:list={['card flex h-full flex-col p-6', t.isPlaceholder && 'border-dashed']}>
+  <div class="flex items-center justify-between gap-3">
+    <div class="flex gap-0.5 text-[color:var(--color-grass)]" role="img" aria-label={`${t.rating} out of 5 stars`}>
+      {
+        Array.from({ length: 5 }).map((_, i) => (
+          <span class:list={[i >= t.rating && 'opacity-25']}>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <path d="M12 2.5l2.9 5.88 6.5.95-4.7 4.58 1.11 6.47L12 17.33l-5.81 3.05 1.11-6.47-4.7-4.58 6.5-.95z" />
+            </svg>
+          </span>
+        ))
+      }
+    </div>
+
+    {
+      t.isPlaceholder && (
+        <span class="rounded bg-[color:var(--color-sand-200)] px-2 py-0.5 text-[0.6rem] font-bold uppercase tracking-wider text-[color:var(--color-charcoal-600)]">
+          Sample — replace
+        </span>
+      )
+    }
+  </div>
+
+  <span class="mt-4 text-[color:var(--color-sand)]" aria-hidden="true">
+    <Icon name="quote" size={22} />
+  </span>
+
+  <blockquote class:list={['mt-2 flex-1', t.isPlaceholder ? 'text-[color:var(--color-slate-soft)] italic' : 'text-[color:var(--color-charcoal-600)]']}>
+    <p>{t.quote}</p>
+  </blockquote>
+
+  <figcaption class="mt-5 border-t border-[color:var(--color-line)] pt-4">
+    <p class="font-bold text-[color:var(--color-forest)]">{t.name}</p>
+    <p class="text-sm text-[color:var(--color-slate-soft)]">{t.location} · {t.service}</p>
+  </figcaption>
+</figure>

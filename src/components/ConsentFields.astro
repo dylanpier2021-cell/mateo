@@ -1,0 +1,65 @@
+---
+/**
+ * ============================================================================
+ *  <ConsentFields /> — A2P 10DLC CONSENT BLOCK
+ * ============================================================================
+ *  🚨 This component is the single most compliance-sensitive file in the repo.
+ *
+ *  The Contact form and the Quote form MUST present an IDENTICAL consent
+ *  section. Rather than trusting two copies of the markup to stay in sync,
+ *  both forms render THIS component, and its wording comes from CONSENT in
+ *  src/data/business.ts. Identical by construction, not by discipline.
+ *
+ *  The rules this encodes — each one is a rejection reason if broken:
+ *   1. TWO separate checkboxes: transactional and marketing.
+ *   2. Both UNCHECKED by default — no `checked` attribute anywhere below.
+ *   3. Both OPTIONAL — no `required` attribute. The form submits either way.
+ *      (LeadForm never gates submission on these; see form.ts.)
+ *   4. The full legal entity name appears inside each statement.
+ *   5. Privacy Policy / Terms links sit BELOW the checkboxes as separate text —
+ *      never inside the checkbox wording.
+ *   6. The phrase "text START" appears nowhere in this section.
+ *
+ *  Before editing, read the comment block at CONSENT in business.ts.
+ * ============================================================================
+ */
+import { CONSENT, LEGAL_NAV } from '@data/business';
+
+interface Props {
+  /** Namespaces the input ids so two forms could coexist on one page. */
+  idPrefix?: string;
+}
+
+const { idPrefix = '' } = Astro.props;
+const id = (base: string) => (idPrefix ? `${idPrefix}-${base}` : base);
+
+const boxes = [CONSENT.transactional, CONSENT.marketing];
+const [privacy, terms] = LEGAL_NAV;
+---
+
+<fieldset class="grid gap-3 border-0 p-0">
+  <legend class="mb-1 text-sm font-bold text-[color:var(--color-charcoal)]">
+    Message preferences <span class="font-normal text-[color:var(--color-slate-soft)]">(optional)</span>
+  </legend>
+
+  {
+    boxes.map((box) => (
+      <label class="consent-row" for={id(box.id)}>
+        {/*
+          No `checked` → unchecked by default.
+          No `required` → optional, exactly as the carrier requires.
+        */}
+        <input type="checkbox" id={id(box.id)} name={box.name} value="yes" />
+        <span class="consent-text">{box.label}</span>
+      </label>
+    ))
+  }
+
+  {/*
+    Privacy / Terms links live HERE — below the checkboxes, as their own text.
+    Do not fold this sentence into a checkbox label.
+  */}
+  <p class="text-sm text-[color:var(--color-slate-soft)]">
+    View our <a href={privacy.href} class="font-semibold text-[color:var(--color-grass-600)] underline hover:text-[color:var(--color-forest)]">Privacy Policy</a> and <a href={terms.href} class="font-semibold text-[color:var(--color-grass-600)] underline hover:text-[color:var(--color-forest)]">Terms &amp; Conditions</a>.
+  </p>
+</fieldset>

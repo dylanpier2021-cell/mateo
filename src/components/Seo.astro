@@ -1,0 +1,53 @@
+---
+/**
+ * <Seo /> — all per-page <head> SEO in one place: unique title + description,
+ * canonical, Open Graph, Twitter Card and geo meta. Keeps every page consistent.
+ */
+import { SITE, BUSINESS } from '@data/business';
+
+interface Props {
+  title: string;
+  description: string;
+  /** Path only, e.g. "/services". Canonical is built from SITE.url. */
+  path: string;
+  image?: string;
+  ogType?: 'website' | 'article' | 'business.business';
+  noindex?: boolean;
+}
+
+const { title, description, path, image, ogType = 'website', noindex = false } = Astro.props;
+
+// Normalize path → clean absolute canonical URL (no trailing slash except root).
+const clean = path === '/' ? '/' : '/' + path.replace(/^\/+|\/+$/g, '');
+const canonical = new URL(clean, SITE.url).href;
+const ogImage = new URL(image ?? SITE.ogImage, SITE.url).href;
+---
+
+<title>{title}</title>
+<meta name="description" content={description} />
+<link rel="canonical" href={canonical} />
+
+{noindex && <meta name="robots" content="noindex, nofollow" />}
+
+{/* Open Graph */}
+<meta property="og:site_name" content={BUSINESS.name} />
+<meta property="og:title" content={title} />
+<meta property="og:description" content={description} />
+<meta property="og:type" content={ogType} />
+<meta property="og:url" content={canonical} />
+<meta property="og:image" content={ogImage} />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta property="og:locale" content={SITE.locale} />
+
+{/* Twitter Card */}
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content={title} />
+<meta name="twitter:description" content={description} />
+<meta name="twitter:image" content={ogImage} />
+
+{/* Geo targeting */}
+<meta name="geo.region" content="US-IL" />
+<meta name="geo.placename" content={`${BUSINESS.homeCity}, ${BUSINESS.homeStateFull}`} />
+<meta name="geo.position" content={`${BUSINESS.geo.lat};${BUSINESS.geo.lng}`} />
+<meta name="ICBM" content={`${BUSINESS.geo.lat}, ${BUSINESS.geo.lng}`} />

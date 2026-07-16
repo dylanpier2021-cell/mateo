@@ -1,0 +1,292 @@
+---
+/**
+ * Home — hero, value prop, service highlights, why-choose-us, gallery strip,
+ * testimonials, service area, and the primary quote CTA.
+ */
+import BaseLayout from '@layouts/BaseLayout.astro';
+import Icon from '@components/Icon.astro';
+import TestimonialCard from '@components/TestimonialCard.astro';
+import CtaBand from '@components/CtaBand.astro';
+import {
+  BUSINESS,
+  SERVICES,
+  WHY_US,
+  GALLERY,
+  TESTIMONIALS,
+  SERVICE_AREA_NAMES,
+  serviceAreaLine,
+  telHref,
+  PRICING_NOTE,
+} from '@data/business';
+
+const HERO = '/images/hero/hero-landscaping.jpg';
+const strip = GALLERY.slice(0, 4);
+---
+
+<BaseLayout
+  title={`Landscaping, Fencing & Home Services in Champaign, IL | ${BUSINESS.legalName}`}
+  description={`Family-owned landscaping, fencing, decks and handyman services in Champaign, IL. ${BUSINESS.yearsInBusiness} years in business, free estimates, warrantied work, bilingual English & Spanish. Serving Champaign, Urbana, Savoy and Mahomet.`}
+  path="/"
+  preloadImage={HERO}
+>
+  {/* ===================== HERO ===================== */}
+  <section class="relative isolate overflow-hidden bg-[color:var(--color-forest)]">
+    <div class="absolute inset-0 -z-10">
+      <img
+        src={HERO}
+        alt="A suburban home fronted by a wide, freshly mown and striped green lawn"
+        class="kenburns h-full w-full object-cover"
+        width="2000"
+        height="1333"
+        fetchpriority="high"
+        decoding="async"
+      />
+      {/* Scrim keeps the headline readable over any photo */}
+      <div
+        class="absolute inset-0"
+        style="background: linear-gradient(100deg, rgba(15,42,31,.93) 0%, rgba(15,42,31,.78) 45%, rgba(15,42,31,.35) 100%)"
+      >
+      </div>
+    </div>
+
+    <div class="container-page py-24 sm:py-32 lg:py-40">
+      <div class="max-w-2xl">
+        <p class="eyebrow !text-[color:var(--color-forest-300)]">
+          {BUSINESS.homeCity}, {BUSINESS.homeState} · Family-owned since {BUSINESS.foundedYear}
+        </p>
+
+        <h1 class="mt-3 text-4xl font-black !text-white sm:text-5xl lg:text-6xl">
+          Champaign's Trusted Landscaping, Fencing &amp; Home Services
+        </h1>
+
+        <p class="mt-6 max-w-xl text-lg text-white/85">
+          One local crew for the whole property — mowing and landscape design, fences and decks,
+          and the repairs on your list inside. {BUSINESS.yearsInBusiness} years in Champaign–Urbana,
+          free estimates, and work we stand behind.
+        </p>
+
+        <div class="mt-8 flex flex-col gap-3 sm:flex-row">
+          <a href="/get-a-free-quote" class="btn-cta text-base">
+            <Icon name="send" size={18} />
+            Get a Free Quote
+          </a>
+          <a href={telHref} class="btn-outline-light text-base">
+            <Icon name="phone" size={17} />
+            {BUSINESS.phoneDisplay}
+          </a>
+        </div>
+
+        {/* Only claims confirmed in the brief belong here. Do not add "licensed"
+            or "insured" until the owner has confirmed it — see INSURANCE_CONFIRMED
+            in business.ts. */}
+        <ul class="check-list check-list--light mt-9 grid gap-x-6 sm:grid-cols-2">
+          <li>Free, no-obligation estimates</li>
+          <li>Warrantied workmanship</li>
+          <li>Bilingual — English &amp; Spanish</li>
+          <li>Family-owned &amp; local</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  {/* ===================== TRUST BAR ===================== */}
+  <section class="border-b border-[color:var(--color-line)] bg-white">
+    <div class="container-page grid grid-cols-2 divide-x divide-[color:var(--color-line)] lg:grid-cols-4">
+      {
+        [
+          { icon: 'clock', stat: `${BUSINESS.yearsInBusiness} years`, label: 'Serving Champaign–Urbana' },
+          { icon: 'receipt', stat: 'Free', label: 'Estimates, always' },
+          { icon: 'shield-check', stat: 'Warrantied', label: 'We stand behind our work' },
+          { icon: 'languages', stat: 'Bilingual', label: 'English & Español' },
+        ].map((item) => (
+          <div class="flex items-center gap-3 px-3 py-6 sm:px-6">
+            <span class="text-[color:var(--color-grass)]">
+              <Icon name={item.icon} size={26} />
+            </span>
+            <span>
+              <span class="block text-base font-black text-[color:var(--color-forest)] sm:text-lg">{item.stat}</span>
+              <span class="block text-xs text-[color:var(--color-slate-soft)] sm:text-sm">{item.label}</span>
+            </span>
+          </div>
+        ))
+      }
+    </div>
+  </section>
+
+  {/* ===================== SERVICES ===================== */}
+  <section class="py-20" aria-labelledby="services-heading">
+    <div class="container-page">
+      <div class="max-w-2xl" data-reveal>
+        <p class="eyebrow">What we do</p>
+        <h2 id="services-heading" class="mt-2 text-3xl font-black sm:text-4xl">
+          Outside and in — one crew for the whole property
+        </h2>
+        <p class="mt-4 text-lg text-[color:var(--color-charcoal-600)]">
+          Most homeowners around here end up juggling four contractors. You don't have to.
+          Here's everything we handle.
+        </p>
+      </div>
+
+      <div class="mt-12 grid gap-6 sm:grid-cols-2">
+        {
+          SERVICES.map((s, i) => (
+            <a
+              href={`/services#${s.slug}`}
+              class="group card flex flex-col overflow-hidden"
+              data-reveal
+              style={`--reveal-delay:${i * 90}ms`}
+            >
+              <div class="img-frame !rounded-none">
+                <img
+                  src={s.image}
+                  alt={s.imageAlt}
+                  class="h-52 w-full object-cover"
+                  width="800"
+                  height="533"
+                  loading="lazy"
+                  decoding="async"
+                />
+              </div>
+              <div class="flex flex-1 flex-col p-6">
+                <span class="inline-flex h-11 w-11 items-center justify-center rounded-md bg-[color:var(--color-sand-100)] text-[color:var(--color-grass)]">
+                  <Icon name={s.icon} size={22} />
+                </span>
+                <h3 class="mt-4 text-xl font-black">{s.name}</h3>
+                <p class="mt-2 flex-1 text-[color:var(--color-charcoal-600)]">{s.blurb}</p>
+                <span class="mt-4 inline-flex items-center gap-1.5 text-sm font-bold text-[color:var(--color-grass-600)]">
+                  See what's included
+                  <span class="nudge">
+                    <Icon name="arrow-right" size={15} />
+                  </span>
+                </span>
+              </div>
+            </a>
+          ))
+        }
+      </div>
+
+      <p class="mt-8 text-center text-sm text-[color:var(--color-slate-soft)]">{PRICING_NOTE}</p>
+    </div>
+  </section>
+
+  {/* ===================== WHY US ===================== */}
+  <section class="bg-sand-tint py-20" aria-labelledby="why-heading">
+    <div class="container-page">
+      <div class="max-w-2xl" data-reveal>
+        <p class="eyebrow">Why neighbors call us back</p>
+        <h2 id="why-heading" class="mt-2 text-3xl font-black sm:text-4xl">
+          {BUSINESS.yearsInBusiness} years of showing up and doing it right
+        </h2>
+      </div>
+
+      <div class="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        {
+          WHY_US.map((item, i) => (
+            <div class="card p-6" data-reveal style={`--reveal-delay:${i * 70}ms`}>
+              <span class="inline-flex h-11 w-11 items-center justify-center rounded-md bg-[color:var(--color-forest)] text-[color:var(--color-forest-300)]">
+                <Icon name={item.icon} size={21} />
+              </span>
+              <h3 class="mt-4 text-lg font-black">{item.title}</h3>
+              <p class="mt-2 text-[color:var(--color-charcoal-600)]">{item.body}</p>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  {/* ===================== GALLERY STRIP ===================== */}
+  <section class="py-20" aria-labelledby="work-heading">
+    <div class="container-page">
+      <div class="flex flex-wrap items-end justify-between gap-4" data-reveal>
+        <div class="max-w-xl">
+          <p class="eyebrow">Our work</p>
+          <h2 id="work-heading" class="mt-2 text-3xl font-black sm:text-4xl">The work we do around Champaign–Urbana</h2>
+        </div>
+        <a href="/our-work" class="group inline-flex items-center gap-1.5 font-bold text-[color:var(--color-grass-600)]">
+          See the full gallery
+          <span class="nudge"><Icon name="arrow-right" size={16} /></span>
+        </a>
+      </div>
+
+      <div class="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        {
+          strip.map((item, i) => (
+            <figure class="group img-frame relative" data-reveal="zoom" style={`--reveal-delay:${i * 80}ms`}>
+              <img
+                src={item.src}
+                alt={item.alt}
+                class="h-56 w-full object-cover"
+                width="600"
+                height="450"
+                loading="lazy"
+                decoding="async"
+              />
+              <figcaption class="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 to-transparent p-4">
+                <span class="text-[0.6rem] font-bold uppercase tracking-[0.14em] text-[color:var(--color-forest-300)]">
+                  {item.tag}
+                </span>
+                <span class="block text-sm font-bold text-white">{item.caption}</span>
+              </figcaption>
+            </figure>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  {/* ===================== TESTIMONIALS ===================== */}
+  <section class="bg-sand-tint py-20" aria-labelledby="reviews-heading">
+    <div class="container-page">
+      <div class="max-w-2xl" data-reveal>
+        <p class="eyebrow">Reviews</p>
+        <h2 id="reviews-heading" class="mt-2 text-3xl font-black sm:text-4xl">What Champaign homeowners say</h2>
+      </div>
+
+      <div class="mt-12 grid gap-6 lg:grid-cols-3">
+        {
+          TESTIMONIALS.map((t, i) => (
+            <div data-reveal style={`--reveal-delay:${i * 90}ms`}>
+              <TestimonialCard testimonial={t} />
+            </div>
+          ))
+        }
+      </div>
+
+      <div class="mt-10 text-center">
+        <a href="/reviews" class="btn-outline">Read all reviews</a>
+      </div>
+    </div>
+  </section>
+
+  {/* ===================== SERVICE AREA ===================== */}
+  <section class="py-20" aria-labelledby="area-heading">
+    <div class="container-page">
+      <div class="card p-8 sm:p-12" data-reveal>
+        <div class="flex items-start gap-4">
+          <span class="mt-1 shrink-0 text-[color:var(--color-grass)]">
+            <Icon name="map-pin" size={28} />
+          </span>
+          <div>
+            <h2 id="area-heading" class="text-2xl font-black sm:text-3xl">Where we work</h2>
+            <p class="mt-3 max-w-2xl text-[color:var(--color-charcoal-600)]">{serviceAreaLine}</p>
+            <ul class="mt-5 flex flex-wrap gap-2">
+              {
+                SERVICE_AREA_NAMES.map((city) => (
+                  <li class="rounded-full border border-[color:var(--color-line)] bg-[color:var(--color-sand-100)] px-3.5 py-1.5 text-sm font-semibold text-[color:var(--color-forest)]">
+                    {city}, {BUSINESS.homeState}
+                  </li>
+                ))
+              }
+            </ul>
+            <p class="mt-5 text-sm text-[color:var(--color-slate-soft)]">
+              Just outside the list? Call us anyway — we'll tell you honestly whether we can get to you.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <CtaBand />
+</BaseLayout>

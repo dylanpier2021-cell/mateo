@@ -1,0 +1,109 @@
+---
+/**
+ * <LeadForm /> — the ONE form used by both /contact and /get-a-free-quote.
+ *
+ * Both pages render this component, so the two forms are identical in fields
+ * and (critically) in their consent section — an A2P requirement. Only the
+ * submit-button label and the form's tracking name differ.
+ *
+ * Submission path:
+ *   • If PUBLIC_GHL_INBOUND_WEBHOOK_URL is set, form.ts POSTs the payload to
+ *     the GoHighLevel inbound webhook, then redirects to /thank-you.
+ *   • If it isn't set (or JS is off), the form falls back to a native POST
+ *     captured by Netlify Forms, with action="/thank-you".
+ * Either way the user lands on a plain confirmation page — never another
+ * opt-in form, which carriers reject.
+ *
+ * Consent checkboxes NEVER gate submission: they are optional by rule.
+ */
+import { LEAD, SERVICE_OPTIONS, BUSINESS, PLACEHOLDER_PHONE } from '@data/business';
+import ConsentFields from './ConsentFields.astro';
+import Icon from './Icon.astro';
+
+interface Props {
+  /** Distinguishes submissions in the CRM / Netlify dashboard. */
+  formName: 'quote' | 'contact';
+  submitLabel?: string;
+  idPrefix?: string;
+}
+
+const { formName, submitLabel = 'Get my free estimate', idPrefix = formName } = Astro.props;
+
+const id = (base: string) => `${idPrefix}-${base}`;
+
+// Placeholder phone shouldn't leak into the example text shown to users.
+const phoneExample = BUSINESS.phoneDisplay === PLACEHOLDER_PHONE ? '(217) 555-0138' : BUSINESS.phoneDisplay;
+---
+
+<form
+  class="grid gap-5"
+  data-lead-form
+  data-webhook={LEAD.inboundWebhookUrl}
+  data-thanks={LEAD.thankYouPath}
+  name={formName}
+  method="POST"
+  data-netlify="true"
+  netlify-honeypot="bot-field"
+  action={LEAD.thankYouPath}
+  aria-describedby={id('status')}
+>
+  {/* Netlify Forms wiring (the no-JS / no-webhook fallback path) */}
+  <input type="hidden" name="form-name" value={formName} />
+  <input type="hidden" name="source_form" value={formName} />
+  <p class="hidden" aria-hidden="true">
+    <label>Leave this field empty: <input name="bot-field" tabindex="-1" autocomplete="off" /></label>
+  </p>
+
+  <div class="grid gap-5 sm:grid-cols-2">
+    <div>
+      <label class="field-label" for={id('name')}>Name</label>
+      <input class="field" id={id('name')} name="name" type="text" required autocomplete="name" placeholder="Your name" />
+    </div>
+    <div>
+      <label class="field-label" for={id('phone')}>Phone</label>
+      <input class="field" id={id('phone')} name="phone" type="tel" required autocomplete="tel" placeholder={phoneExample} />
+    </div>
+  </div>
+
+  <div>
+    <label class="field-label" for={id('email')}>Email</label>
+    <input class="field" id={id('email')} name="email" type="email" required autocomplete="email" placeholder="you@email.com" />
+  </div>
+
+  <div>
+    <label class="field-label" for={id('service')}>What do you need help with?</label>
+    <select class="field" id={id('service')} name="service" required>
+      <option value="">Select a service…</option>
+      {SERVICE_OPTIONS.map((s) => <option value={s}>{s}</option>)}
+    </select>
+  </div>
+
+  <div>
+    <label class="field-label" for={id('message')}>
+      Tell us about the job
+      <span class="font-normal text-[color:var(--color-slate-soft)]">(optional)</span>
+    </label>
+    <textarea
+      class="field"
+      id={id('message')}
+      name="message"
+      rows="4"
+      placeholder="Size of the yard, what you'd like done, your address, timing — whatever helps us give you an accurate number."
+    ></textarea>
+  </div>
+
+  {/* ⚠️ A2P consent block — identical on every form. See ConsentFields.astro. */}
+  <ConsentFields idPrefix={idPrefix} />
+
+  <button type="submit" class="btn-cta w-full text-base" data-lead-submit>
+    <Icon name="send" size={18} />
+    <span data-lead-label>{submitLabel}</span>
+  </button>
+
+  {/* Live region for success / error announcements */}
+  <p id={id('status')} role="status" aria-live="polite" class="hidden text-center text-sm"></p>
+
+  <p class="text-center text-xs text-[color:var(--color-slate-soft)]">
+    Free, no-obligation estimate. We usually reply the same day.
+  </p>
+</form>
