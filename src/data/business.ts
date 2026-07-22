@@ -78,8 +78,8 @@ export const BUSINESS = {
   email: 'info@mateolandscaping.com',
 
   address: {
-    /** ⚠️ PLACEHOLDER — carriers want a real street address. A home address is fine. */
-    street: PLACEHOLDER_STREET,
+    /** Physical address. Must match the A2P registration and Google Business Profile. */
+    street: '1513 Paula Dr',
     city: 'Champaign',
     state: 'IL',
     stateFull: 'Illinois',
@@ -132,8 +132,8 @@ export const mapEmbedSrc = `https://www.google.com/maps?q=${encodeURIComponent(
 /* -------------------------------------------------------------------------- */
 
 export const SOCIAL = {
-  /** ⚠️ PLACEHOLDER — point at the real page, or delete the entry entirely. */
-  facebook: PLACEHOLDER_FACEBOOK,
+  /** Verified, live Facebook page. Mirrored into schema.org `sameAs`. */
+  facebook: 'https://www.facebook.com/profile.php?id=61575308364472',
 } as const;
 
 /** Only real, resolving URLs belong in `sameAs` — a dead link hurts review. */
