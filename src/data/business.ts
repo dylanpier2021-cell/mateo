@@ -27,22 +27,24 @@
 /*  survive, so a placeholder can't quietly ship to a carrier reviewer.         */
 /* -------------------------------------------------------------------------- */
 
-export const PLACEHOLDER_PHONE = '(217) XXX-XXXX';
-export const PLACEHOLDER_PHONE_E164 = '+1217XXXXXXX';
-export const PLACEHOLDER_STREET = '[STREET ADDRESS]';
-export const PLACEHOLDER_FACEBOOK = 'https://www.facebook.com/';
+// Typed as plain `string` (not the narrow literal) so the defensive guards that
+// compare real values against these sentinels stay valid TypeScript once the
+// real values are filled in — otherwise TS reports "no overlap" on a comparison
+// that is the whole point of the guard.
+export const PLACEHOLDER_PHONE: string = '(217) XXX-XXXX';
+export const PLACEHOLDER_PHONE_E164: string = '+1217XXXXXXX';
+export const PLACEHOLDER_STREET: string = '[STREET ADDRESS]';
+export const PLACEHOLDER_FACEBOOK: string = 'https://www.facebook.com/';
 
 /**
- * ⚠️ UNVERIFIED CLAIM — leave false until the owner confirms current coverage.
+ * Insurance. Confirmed by the owner: the business carries insurance. The
+ * "Are you insured?" FAQ answer and the hero trust list read from this flag.
  *
- * The brief never stated that this business is licensed or insured, so the site
- * does not say so. "Insured" is a legally meaningful claim about a real company:
- * if it isn't true, it is false advertising, and a homeowner who hired on the
- * strength of it has a real grievance. The FAQ answer for "Are you insured?"
- * branches on this flag — set it to true ONLY once you have seen the policy,
- * and then you can also add "Licensed & insured" back to the home page hero list.
+ * Note: this asserts INSURED only — not "licensed". Landscaping/handyman work
+ * often needs no state license, and claiming one that doesn't exist is its own
+ * false-advertising problem, so nothing on the site says "licensed".
  */
-export const INSURANCE_CONFIRMED = false;
+export const INSURANCE_CONFIRMED = true;
 
 /* -------------------------------------------------------------------------- */
 /*  SITE                                                                        */
@@ -411,7 +413,7 @@ export const BEFORE_AFTER: BeforeAfterItem[] = [
     beforeAlt: 'A badly overgrown yard of waist-high weeds with a single mown strip cut through it',
     after: '/images/ba/yard-after.jpg',
     afterAlt: 'A neatly mown, striped green front lawn in front of a house',
-    note: 'This is the job: overgrowth cut back, debris hauled off, and the lawn brought back to a clean, even cut.',
+    note: 'The difference a full cleanup makes: overgrowth cut back, debris hauled off, and the lawn brought back to a clean, even cut.',
   },
   {
     id: 'bed-rebuild',
@@ -421,56 +423,99 @@ export const BEFORE_AFTER: BeforeAfterItem[] = [
     beforeAlt: 'A bare garden bed of freshly turned soil with a spade standing in it',
     after: '/images/ba/beds-after.jpg',
     afterAlt: 'A garden bed densely planted with daffodils, pansies and daisies in bloom',
-    note: 'Beds stripped back and re-worked, then planted out and mulched so they fill in season after season.',
+    note: 'What a replanting does: beds cleared and re-worked, then planted out and mulched so they fill in season after season.',
   },
 ];
 
 /* -------------------------------------------------------------------------- */
 /*  TESTIMONIALS                                                                */
-/*  ⚠️ These are PLACEHOLDERS, flagged and visibly labeled on the page.         */
-/*     Publishing invented reviews as if they were real customers is deceptive  */
-/*     (and in the US, an FTC problem). Replace each with a real, permissioned  */
-/*     review and set `isPlaceholder: false` — the label disappears on its own. */
+/*                                                                              */
+/*  Real customer reviews provided by the owner.                                */
+/*                                                                              */
+/*  ⚠️ On attribution: these arrived without customer names, so each is         */
+/*     attributed simply as "Homeowner". We do NOT invent names or towns —      */
+/*     attaching a fabricated identity to a real quote is itself a form of      */
+/*     fake review. If you have the reviewers' first names / initials (and the  */
+/*     source, e.g. Google or Facebook), add `name` and `location` per entry;   */
+/*     named, source-linked reviews are far more convincing to a homeowner.     */
+/*                                                                              */
+/*  `isPlaceholder` stays for the card's sample-badge logic; it is false for    */
+/*  every real review below, so no badge shows and Review schema is emitted.    */
 /* -------------------------------------------------------------------------- */
 
 export interface Testimonial {
   quote: string;
   name: string;
+  /** Optional — left blank when the reviewer's town isn't known. */
   location: string;
+  /** Optional — service tag, when the review clearly names one. */
   service: string;
   rating: number;
   /** While true, the card renders a visible "sample" badge. */
   isPlaceholder: boolean;
 }
 
+const review = (quote: string, service = ''): Testimonial => ({
+  quote,
+  name: 'Homeowner',
+  location: '',
+  service,
+  rating: 5,
+  isPlaceholder: false,
+});
+
 export const TESTIMONIALS: Testimonial[] = [
-  {
-    quote:
-      'Example review — replace with a real customer’s words. This is where a short, specific quote about the job goes: what they needed, how the crew worked, and how it turned out.',
-    name: 'Customer name',
-    location: 'Champaign, IL',
-    service: 'Lawn Care & Landscaping',
-    rating: 5,
-    isPlaceholder: true,
-  },
-  {
-    quote:
-      'Example review — replace with a real customer’s words. Reviews that mention the specific service and the neighborhood tend to be the most convincing to a homeowner comparing quotes.',
-    name: 'Customer name',
-    location: 'Urbana, IL',
-    service: 'Fencing',
-    rating: 5,
-    isPlaceholder: true,
-  },
-  {
-    quote:
-      'Example review — replace with a real customer’s words. Ask a happy customer for two sentences right after you finish a job; that is when they are most willing.',
-    name: 'Customer name',
-    location: 'Savoy, IL',
-    service: 'Decks',
-    rating: 5,
-    isPlaceholder: true,
-  },
+  review(
+    'Mateo did an amazing job cleaning up our landscaping. He was friendly, professional, and finished everything on time. Our yard has never looked better.',
+    'Lawn Care & Landscaping'
+  ),
+  review(
+    'We hired Mateo for a small landscaping project, and the results exceeded our expectations. Great communication, fair pricing, and quality work from start to finish.',
+    'Lawn Care & Landscaping'
+  ),
+  review(
+    'Mateo transformed our front yard in just a couple of days. He paid attention to every detail and made sure we were happy before leaving.',
+    'Lawn Care & Landscaping'
+  ),
+  review(
+    "Excellent experience! Mateo was respectful, hardworking, and clearly takes pride in his work. I'd definitely hire him again."
+  ),
+  review(
+    'Very reliable and easy to work with. Mateo explained everything before starting and delivered exactly what he promised. Highly recommend.'
+  ),
+  review(
+    'Our landscaping project turned out beautiful. Mateo was punctual, professional, and kept the work area clean throughout the job.',
+    'Lawn Care & Landscaping'
+  ),
+  review(
+    'Great customer service and even better craftsmanship. Mateo went above and beyond to make sure everything looked perfect.'
+  ),
+  review(
+    "I was impressed with Mateo's attention to detail. The finished project looks fantastic, and the entire process was smooth from beginning to end."
+  ),
+  review(
+    'Mateo is honest, dependable, and does excellent work. He treated our property with care and delivered high-quality results.'
+  ),
+  review(
+    "We couldn't be happier with the outcome. Mateo worked efficiently and made our yard look completely refreshed.",
+    'Lawn Care & Landscaping'
+  ),
+  review(
+    'Professional from the first phone call to the final walkthrough. Mateo communicated well, arrived on time, and did outstanding work.'
+  ),
+  review(
+    'The landscaping looks incredible. Mateo was courteous, knowledgeable, and made sure every detail was completed the right way.',
+    'Lawn Care & Landscaping'
+  ),
+  review(
+    'Fantastic experience. Mateo listened to what we wanted, offered helpful suggestions, and completed the project on schedule.'
+  ),
+  review(
+    "Quality work at a fair price. Mateo was friendly, hardworking, and exceeded our expectations. We'd happily recommend his services."
+  ),
+  review(
+    "We had a great experience working with Mateo. He was reliable, respectful, and delivered beautiful results. We'd definitely hire him again."
+  ),
 ];
 
 /* -------------------------------------------------------------------------- */
@@ -578,28 +623,42 @@ export const SERVICE_OPTIONS = [
 ];
 
 /* -------------------------------------------------------------------------- */
-/*  BUILD-TIME PLACEHOLDER GUARD                                                */
-/*  Prints a loud warning during `npm run build` while stubs remain, so an      */
-/*  unfilled placeholder can't quietly reach a carrier reviewer.                */
+/*  BUILD-TIME GUARD                                                            */
+/*  Prints warnings during `npm run build`. Two tiers:                          */
+/*    • A2P BLOCKERS — must be empty before submitting the campaign. NAP that   */
+/*      doesn't match the registration is a hard rejection.                     */
+/*    • RECOMMENDED  — honesty / polish items. Not carrier blockers, but each   */
+/*      is a claim about a real business worth getting right before launch.     */
 /* -------------------------------------------------------------------------- */
 
-const unfilled: string[] = [];
-if (BUSINESS.phoneDisplay === PLACEHOLDER_PHONE) unfilled.push('PHONE     → BUSINESS.phoneDisplay / phoneE164');
-if (BUSINESS.address.street === PLACEHOLDER_STREET) unfilled.push('ADDRESS   → BUSINESS.address.street');
-if (SOCIAL.facebook === PLACEHOLDER_FACEBOOK) unfilled.push('FACEBOOK  → SOCIAL.facebook');
-if (TESTIMONIALS.some((t) => t.isPlaceholder)) unfilled.push('REVIEWS   → TESTIMONIALS (still sample text)');
-if (PHOTOS_ARE_STOCK) unfilled.push('PHOTOS    → PHOTOS_ARE_STOCK (still stock imagery, not real jobs)');
-if (!INSURANCE_CONFIRMED) unfilled.push('INSURANCE → INSURANCE_CONFIRMED (confirm coverage with the owner)');
+const a2pBlockers: string[] = [];
+if (BUSINESS.phoneDisplay === PLACEHOLDER_PHONE) a2pBlockers.push('PHONE    → BUSINESS.phoneDisplay / phoneE164');
+if (BUSINESS.address.street === PLACEHOLDER_STREET) a2pBlockers.push('ADDRESS  → BUSINESS.address.street');
+if (SOCIAL.facebook === PLACEHOLDER_FACEBOOK) a2pBlockers.push('FACEBOOK → SOCIAL.facebook (fill in or remove)');
 
-if (unfilled.length > 0 && typeof console !== 'undefined') {
-  console.warn(
-    [
-      '',
-      '  ⚠️  A2P PLACEHOLDER CHECK — the following are still unfilled:',
-      ...unfilled.map((u) => `      • ${u}`),
-      '',
-      '     Edit src/data/business.ts. Do NOT submit for A2P review until this list is empty.',
-      '',
-    ].join('\n')
-  );
+const recommended: string[] = [];
+if (TESTIMONIALS.some((t) => t.isPlaceholder)) recommended.push('REVIEWS  → TESTIMONIALS still contain sample text');
+if (PHOTOS_ARE_STOCK) recommended.push('PHOTOS   → still licensed stock, not the company\'s own job photos');
+
+if (typeof console !== 'undefined') {
+  if (a2pBlockers.length > 0) {
+    console.warn(
+      [
+        '',
+        '  ⛔  A2P BLOCKERS — do NOT submit the campaign until these are filled:',
+        ...a2pBlockers.map((u) => `      • ${u}`),
+        '',
+      ].join('\n')
+    );
+  }
+  if (recommended.length > 0) {
+    console.warn(
+      [
+        '',
+        '  ℹ️  RECOMMENDED before launch (not A2P blockers):',
+        ...recommended.map((u) => `      • ${u}`),
+        '',
+      ].join('\n')
+    );
+  }
 }

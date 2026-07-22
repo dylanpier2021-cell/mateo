@@ -13,6 +13,7 @@ import {
   WHY_US,
   GALLERY,
   TESTIMONIALS,
+  INSURANCE_CONFIRMED,
   SERVICE_AREA_NAMES,
   serviceAreaLine,
   telHref,
@@ -21,6 +22,8 @@ import {
 
 const HERO = '/images/hero/hero-landscaping.jpg';
 const strip = GALLERY.slice(0, 4);
+// We have 15 real reviews; show the first three here and link to the rest.
+const featuredReviews = TESTIMONIALS.slice(0, 3);
 ---
 
 <BaseLayout
@@ -76,14 +79,13 @@ const strip = GALLERY.slice(0, 4);
           </a>
         </div>
 
-        {/* Only claims confirmed in the brief belong here. Do not add "licensed"
-            or "insured" until the owner has confirmed it — see INSURANCE_CONFIRMED
-            in business.ts. */}
+        {/* "Insured" is gated on INSURANCE_CONFIRMED (owner-confirmed). Do NOT
+            add "licensed" — that has not been confirmed and may not apply. */}
         <ul class="check-list check-list--light mt-9 grid gap-x-6 sm:grid-cols-2">
           <li>Free, no-obligation estimates</li>
           <li>Warrantied workmanship</li>
           <li>Bilingual — English &amp; Spanish</li>
-          <li>Family-owned &amp; local</li>
+          <li>{INSURANCE_CONFIRMED ? 'Insured & family-owned' : 'Family-owned & local'}</li>
         </ul>
       </div>
     </div>
@@ -245,7 +247,7 @@ const strip = GALLERY.slice(0, 4);
 
       <div class="mt-12 grid gap-6 lg:grid-cols-3">
         {
-          TESTIMONIALS.map((t, i) => (
+          featuredReviews.map((t, i) => (
             <div data-reveal style={`--reveal-delay:${i * 90}ms`}>
               <TestimonialCard testimonial={t} />
             </div>
@@ -254,7 +256,7 @@ const strip = GALLERY.slice(0, 4);
       </div>
 
       <div class="mt-10 text-center">
-        <a href="/reviews" class="btn-outline">Read all reviews</a>
+        <a href="/reviews" class="btn-outline">Read all {TESTIMONIALS.length} reviews</a>
       </div>
     </div>
   </section>

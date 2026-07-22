@@ -15,6 +15,10 @@ interface Props {
   testimonial: Testimonial;
 }
 const { testimonial: t } = Astro.props;
+
+// location and service are optional; join only the parts that exist so we never
+// render a stray "·" for an anonymous review.
+const meta = [t.location, t.service].filter(Boolean).join(' · ');
 ---
 
 <figure class:list={['card flex h-full flex-col p-6', t.isPlaceholder && 'border-dashed']}>
@@ -50,6 +54,6 @@ const { testimonial: t } = Astro.props;
 
   <figcaption class="mt-5 border-t border-[color:var(--color-line)] pt-4">
     <p class="font-bold text-[color:var(--color-forest)]">{t.name}</p>
-    <p class="text-sm text-[color:var(--color-slate-soft)]">{t.location} · {t.service}</p>
+    {meta && <p class="text-sm text-[color:var(--color-slate-soft)]">{meta}</p>}
   </figcaption>
 </figure>

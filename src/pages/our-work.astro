@@ -18,40 +18,9 @@ import { BUSINESS, GALLERY, BEFORE_AFTER, SERVICES, PHOTOS_ARE_STOCK } from '@da
   <PageHero
     eyebrow="Our work"
     title="See the difference for yourself"
-    intro="Yards reset, fences set straight, decks built. Drag the slider to see the before."
+    intro="The kind of work we do — and the difference it makes. Drag the slider to see the before."
     crumb="Our Work"
   />
-
-  {
-    PHOTOS_ARE_STOCK && (
-      /* Honest disclosure while the site runs on stock photography. Claiming
-         these are Mateo's completed jobs would mislead homeowners who hire on
-         the strength of them. Drop real job photos into the same paths and set
-         PHOTOS_ARE_STOCK = false in business.ts — this notice removes itself. */
-      <div class="container-page pt-10">
-        <div class="flex items-start gap-3 rounded-md border-2 border-dashed border-[color:var(--color-sand)] bg-[color:var(--color-sand-100)] p-5">
-          <span class="mt-0.5 shrink-0 text-[color:var(--color-charcoal-600)]">
-            <Icon name="file-text" size={20} />
-          </span>
-          <div class="text-sm text-[color:var(--color-charcoal-600)]">
-            <p class="font-bold text-[color:var(--color-charcoal)]">
-              Placeholder photography — replace before launch
-            </p>
-            <p class="mt-1">
-              The photos on this page are licensed stock images that illustrate the kind of work we
-              do — they are not photographs of our own completed jobs. Replace them with real project
-              photos (same file paths under{' '}
-              <code class="rounded bg-white px-1.5 py-0.5 text-xs">public/images/</code>) and set{' '}
-              <code class="rounded bg-white px-1.5 py-0.5 text-xs">PHOTOS_ARE_STOCK = false</code> in{' '}
-              <code class="rounded bg-white px-1.5 py-0.5 text-xs">src/data/business.ts</code>. Until
-              then this notice stays up, because presenting stock photos as your own work would
-              mislead the homeowners deciding whether to hire you.
-            </p>
-          </div>
-        </div>
-      </div>
-    )
-  }
 
   {/* ===================== BEFORE / AFTER ===================== */}
   <section class="py-16 sm:py-20" aria-labelledby="ba-heading">
@@ -113,6 +82,19 @@ import { BUSINESS, GALLERY, BEFORE_AFTER, SERVICES, PHOTOS_ARE_STOCK } from '@da
           ))
         }
       </div>
+
+      {
+        PHOTOS_ARE_STOCK && (
+          /* Honest, visitor-facing footnote while the site uses stock photography.
+             It keeps the page looking finished (no builder-style banner) without
+             implying these specific images are Mateo's own completed jobs — which
+             would mislead a homeowner choosing whom to hire. Swap in real job
+             photos at the same paths and set PHOTOS_ARE_STOCK = false to remove it. */
+          <p class="mt-8 text-center text-xs text-[color:var(--color-slate-soft)]">
+            Photos shown are illustrative examples of the services we offer.
+          </p>
+        )
+      }
     </div>
   </section>
 
