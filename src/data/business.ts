@@ -70,9 +70,9 @@ export const BUSINESS = {
   shortBrand: 'Landscaping · Fencing · Decks · Handyman',
   tagline: "Champaign's trusted landscaping, fencing & home services.",
 
-  /** ⚠️ PLACEHOLDER — replace with the real business line before A2P submission. */
-  phoneDisplay: PLACEHOLDER_PHONE,
-  phoneE164: PLACEHOLDER_PHONE_E164,
+  /** Business line. Keep display + E.164 in sync and identical to the A2P registration. */
+  phoneDisplay: '(217) 866-0943',
+  phoneE164: '+12178660943',
 
   /** Branded email — a Gmail/Yahoo/Hotmail address here fails carrier review. */
   email: 'info@mateolandscaping.com',
