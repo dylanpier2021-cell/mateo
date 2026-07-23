@@ -110,8 +110,8 @@ const VALUES = [
         <div class="mt-5 max-w-3xl space-y-4 text-[color:var(--color-charcoal-600)]">
           <p>
             When you call {BUSINESS.name}, you're not routed through a call center in another state.
-            You get the owner, or someone who works alongside him every day and can answer for the
-            work.
+            You get {BUSINESS.owner}, the owner, or someone who works alongside them every day and can
+            answer for the work.
           </p>
           <p>
             That's deliberate. When the person who quotes the job is the person who has to stand
@@ -193,6 +193,10 @@ const VALUES = [
           <div>
             <dt class="text-xs font-bold uppercase tracking-[0.14em] text-[color:var(--color-grass)]">Doing business as</dt>
             <dd class="mt-1.5 font-semibold text-[color:var(--color-forest)]">{BUSINESS.dba}</dd>
+          </div>
+          <div>
+            <dt class="text-xs font-bold uppercase tracking-[0.14em] text-[color:var(--color-grass)]">Owner</dt>
+            <dd class="mt-1.5 font-semibold text-[color:var(--color-forest)]">{BUSINESS.owner}</dd>
           </div>
           <div>
             <dt class="text-xs font-bold uppercase tracking-[0.14em] text-[color:var(--color-grass)]">In business since</dt>

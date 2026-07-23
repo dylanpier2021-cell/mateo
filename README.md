@@ -96,7 +96,7 @@ collected if a carrier or customer ever asks.
 
 ### The opt-in URL
 
-`https://mateolandscaping.com/get-a-free-quote` — this exact path is what gets
+`https://www.mateoslandscapingandmore.com/get-a-free-quote` — this exact path is what gets
 registered with the carrier. **Do not rename**
 `src/pages/get-a-free-quote.astro` without updating the A2P registration to match.
 
@@ -136,7 +136,7 @@ src/
     motion.ts          scroll reveals, header, before/after sliders
   pages/               index · services · our-work · about · reviews · faq
                        contact · get-a-free-quote · thank-you
-                       privacy-policy · terms-and-conditions · 404
+                       privacy-policy · terms · 404
 ```
 
 Multi-page is a hard A2P requirement — a one-page site is auto-rejected.
@@ -166,7 +166,7 @@ Payload sent to GHL:
   "consent_transactional": "yes|no",
   "consent_marketing": "yes|no",
   "consent_timestamp": "2026-07-16T…Z",
-  "opt_in_url": "https://mateolandscaping.com/get-a-free-quote",
+  "opt_in_url": "https://www.mateoslandscapingandmore.com/get-a-free-quote",
   "source_form": "quote|contact",
   "page_path": "/get-a-free-quote"
 }
@@ -187,7 +187,7 @@ Use the **Pre-built (Chat Widget)** flow — highest approval rate.
 
 **How do end users consent to receive messages?**
 
-> End users opt in by visiting https://mateolandscaping.com/get-a-free-quote,
+> End users opt in by visiting https://www.mateoslandscapingandmore.com/get-a-free-quote,
 > filling out the fields, and optionally selecting checkboxes to consent to
 > receive transactional communications such as confirmations, updates, and
 > reminders. Users may also opt in to receive marketing and promotional messages

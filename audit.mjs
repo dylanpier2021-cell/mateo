@@ -21,7 +21,10 @@ const check = (name, ok, detail = '') => {
 };
 
 const LEGAL = 'Mateo Landscaping and More LLC';
-const EMAIL = 'info@mateolandscaping.com';
+const EMAIL = 'mateobernabe123@gmail.com';
+// The owner chose a Gmail contact address (see business.ts). The "no free-email"
+// check allows this one known address but still flags any OTHER stray free email.
+const ALLOWED_FREE_EMAIL = 'mateobernabe123@gmail.com';
 
 const TRANSACTIONAL = `By checking this box, I consent to receive transactional messages related to my account, orders, or services I have requested from ${LEGAL}. These messages may include reminders, appointment confirmations, and service updates, among others. Message frequency may vary. Message &amp; data rates may apply. Reply HELP for help or STOP to opt out.`;
 const MARKETING = `By checking this box, I consent to receive marketing and promotional messages, including special offers, discounts, and seasonal service reminders, among others, from ${LEGAL}. Message frequency may vary. Message &amp; data rates may apply. Reply HELP for help or STOP to opt out.`;
@@ -30,7 +33,7 @@ const MOBILE_CLAUSE = 'No mobile information will be shared with third parties/a
 const quote = read('get-a-free-quote/index.html');
 const contact = read('contact/index.html');
 const privacy = read('privacy-policy/index.html');
-const terms = read('terms-and-conditions/index.html');
+const terms = read('terms/index.html');
 const thanks = read('thank-you/index.html');
 
 /* ---------------------------------------------------------------- FORMS -- */
@@ -55,10 +58,10 @@ for (const [label, html] of [['quote', quote], ['contact', contact]]) {
 
   // Privacy/Terms links present, and NOT inside the checkbox label text.
   check(`[${label}] links to Privacy Policy`, html.includes('href="/privacy-policy"'));
-  check(`[${label}] links to Terms & Conditions`, html.includes('href="/terms-and-conditions"'));
+  check(`[${label}] links to Terms & Conditions`, html.includes('href="/terms"'));
   check(
     `[${label}] "View our Privacy Policy and Terms & Conditions." sits below the boxes`,
-    /View our\s*<a[^>]*href="\/privacy-policy"[^>]*>Privacy Policy<\/a>\s*and\s*<a[^>]*href="\/terms-and-conditions"[^>]*>Terms &amp; Conditions<\/a>\s*\./.test(html)
+    /View our\s*<a[^>]*href="\/privacy-policy"[^>]*>Privacy Policy<\/a>\s*and\s*<a[^>]*href="\/terms"[^>]*>Terms &amp; Conditions<\/a>\s*\./.test(html)
   );
   check(
     `[${label}] consent labels contain NO embedded links`,
@@ -106,7 +109,7 @@ check('does NOT contain "text START"', !/text START/i.test(privacy));
 
 /* ------------------------------------------------------------ TERMS -- */
 console.log('\n── TERMS & CONDITIONS ──');
-check('is a dedicated page', existsSync(join(DIST, 'terms-and-conditions/index.html')));
+check('is a dedicated page', existsSync(join(DIST, 'terms/index.html')));
 check('has an SMS/messaging section', /text messaging program/i.test(terms));
 check('states consent is not a condition of purchase', /not a condition of any purchase/i.test(terms));
 check('does NOT contain "text START"', !/text START/i.test(terms));
@@ -128,11 +131,16 @@ const missingEmail = pages.filter((p) => !readFileSync(p, 'utf8').includes(EMAIL
 check('branded email appears on EVERY page', missingEmail.length === 0,
   missingEmail.map((p) => p.replace(DIST, '')).join(', '));
 
-check('email is branded (not gmail/yahoo/hotmail)', /@mateolandscaping\.com$/.test(EMAIL));
-
-const gmailHits = pages.filter((p) => /@(gmail|yahoo|hotmail|outlook)\.com/i.test(readFileSync(p, 'utf8')));
-check('NO free-email addresses anywhere', gmailHits.length === 0,
-  gmailHits.map((p) => p.replace(DIST, '')).join(', '));
+// The owner opted for a Gmail contact address, so we don't assert "branded";
+// we assert the site shows exactly that one chosen address and no OTHER free
+// email leaked in. (A branded domain address remains recommended for A2P.)
+const strayFreeEmail = pages.filter((p) => {
+  const text = readFileSync(p, 'utf8');
+  const hits = text.match(/[A-Za-z0-9._%+-]+@(?:gmail|yahoo|hotmail|outlook)\.com/gi) || [];
+  return hits.some((h) => h.toLowerCase() !== ALLOWED_FREE_EMAIL);
+});
+check('no free-email address other than the owner\'s chosen one', strayFreeEmail.length === 0,
+  strayFreeEmail.map((p) => p.replace(DIST, '')).join(', '));
 
 /* --------------------------------------------------- LINK INTEGRITY -- */
 console.log('\n── LINK INTEGRITY (no 404s) ──');
@@ -159,7 +167,7 @@ for (const p of pages) {
 check('every internal link resolves', broken.length === 0, broken.join('\n       → '));
 
 // Nav links present on every page
-for (const route of ['/services', '/our-work', '/about', '/reviews', '/faq', '/contact', '/get-a-free-quote', '/privacy-policy', '/terms-and-conditions']) {
+for (const route of ['/services', '/our-work', '/about', '/reviews', '/faq', '/contact', '/get-a-free-quote', '/privacy-policy', '/terms']) {
   const missing = pages.filter((p) => !readFileSync(p, 'utf8').includes(`href="${route}"`));
   check(`"${route}" linked from every page`, missing.length === 0, missing.map((p) => p.replace(DIST, '')).join(', '));
 }

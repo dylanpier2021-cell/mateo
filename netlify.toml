@@ -13,6 +13,14 @@
   status = 301
   force = false
 
+# The Terms page lives at /terms. Redirect the older, longer path so any
+# previously-shared link (or stale registration) still resolves — no 404.
+[[redirects]]
+  from = "/terms-and-conditions"
+  to = "/terms"
+  status = 301
+  force = false
+
 # HTTPS is mandatory for A2P review. Netlify provisions the cert automatically;
 # these headers harden the site so the reviewer sees a clean, secure origin.
 [[headers]]

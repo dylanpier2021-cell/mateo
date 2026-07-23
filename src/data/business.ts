@@ -51,8 +51,14 @@ export const INSURANCE_CONFIRMED = true;
 /* -------------------------------------------------------------------------- */
 
 export const SITE = {
-  /** Production URL. Must be HTTPS and must match the A2P registration exactly. */
-  url: 'https://mateolandscaping.com',
+  /**
+   * Production URL. Must be HTTPS and must match the A2P registration exactly.
+   * Uses the www host because that's where the live site is served
+   * (https://www.mateoslandscapingandmore.com). Keep the opt-in URL registered
+   * with the carrier on this same host, and make sure the non-www host redirects
+   * here so a reviewer never lands on a split domain.
+   */
+  url: 'https://www.mateoslandscapingandmore.com',
   locale: 'en_US',
   lang: 'en',
   ogImage: '/images/hero/hero-landscaping.jpg',
@@ -69,6 +75,8 @@ export const BUSINESS = {
   dba: 'Mateo Landscaping & More',
   /** Convenience alias used in body copy. */
   name: 'Mateo Landscaping & More',
+  /** Owner / principal of the LLC. */
+  owner: 'Maria Pablo Francisco',
   shortBrand: 'Landscaping · Fencing · Decks · Handyman',
   tagline: "Champaign's trusted landscaping, fencing & home services.",
 
@@ -76,8 +84,13 @@ export const BUSINESS = {
   phoneDisplay: '(217) 866-0943',
   phoneE164: '+12178660943',
 
-  /** Branded email — a Gmail/Yahoo/Hotmail address here fails carrier review. */
-  email: 'info@mateolandscaping.com',
+  /**
+   * Contact email. NOTE: this is a Gmail address, chosen by the owner. A branded
+   * address on the domain (info@mateoslandscapingandmore.com) is stronger for
+   * A2P/10DLC review — carriers view free-email senders less favorably — so
+   * switching to a domain mailbox later is recommended if approval is a concern.
+   */
+  email: 'mateobernabe123@gmail.com',
 
   address: {
     /** Physical address. Must match the A2P registration and Google Business Profile. */
@@ -161,7 +174,7 @@ export const NAV = [
 /** Legal pages — linked separately in the footer, as carriers require. */
 export const LEGAL_NAV = [
   { label: 'Privacy Policy', href: '/privacy-policy' },
-  { label: 'Terms & Conditions', href: '/terms-and-conditions' },
+  { label: 'Terms & Conditions', href: '/terms' },
 ] as const;
 
 /* -------------------------------------------------------------------------- */
