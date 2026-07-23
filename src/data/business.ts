@@ -608,6 +608,27 @@ export const CONSENT = {
 } as const;
 
 /**
+ * ═══ VISIBLE SMS DISCLOSURE ═══
+ *
+ * The consent LABELS above live inside <label>/<span> elements. Some A2P
+ * scanners only read plain page text and miss disclosures embedded in checkbox
+ * labels, flagging the opt-in as non-compliant. To fix that, ConsentFields.astro
+ * ALSO renders these fields as a static, server-rendered paragraph directly
+ * beneath the checkboxes — same facts, plain readable text the scanner can see.
+ *
+ * Every required element is a separate field so the audit can assert each one is
+ * present in the built HTML. Keep the sender as the full legal entity name.
+ */
+export const SMS_DISCLOSURE = {
+  sender: BUSINESS.legalName,
+  messageType:
+    'You will receive transactional messages (appointment confirmations, reminders, service updates) and, if you opt in, marketing messages (offers and seasonal reminders).',
+  frequency: 'Message frequency may vary.',
+  rates: 'Message & data rates may apply.',
+  helpStop: 'Reply HELP for help. Reply STOP to opt out / unsubscribe.',
+} as const;
+
+/**
  * The exact sentence carriers look for in the Privacy Policy. Rendered verbatim
  * on /privacy-policy. Do not paraphrase — reviewers pattern-match this.
  */

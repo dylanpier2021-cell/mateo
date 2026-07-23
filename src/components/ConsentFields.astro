@@ -19,11 +19,14 @@
  *   5. Privacy Policy / Terms links sit BELOW the checkboxes as separate text —
  *      never inside the checkbox wording.
  *   6. The phrase "text START" appears nowhere in this section.
+ *   7. A VISIBLE, static disclosure paragraph (SMS_DISCLOSURE) sits directly
+ *      beneath the checkboxes so an A2P scanner reading raw HTML detects the
+ *      required elements even though it can't read text inside checkbox labels.
  *
  *  Before editing, read the comment block at CONSENT in business.ts.
  * ============================================================================
  */
-import { CONSENT, LEGAL_NAV } from '@data/business';
+import { CONSENT, SMS_DISCLOSURE, LEGAL_NAV } from '@data/business';
 
 interface Props {
   /** Namespaces the input ids so two forms could coexist on one page. */
@@ -54,6 +57,20 @@ const [privacy, terms] = LEGAL_NAV;
       </label>
     ))
   }
+
+  {/*
+    VISIBLE SMS DISCLOSURE — static, server-rendered plain text directly beneath
+    the checkboxes. This exists so an A2P scanner that only reads page text (and
+    can't see the wording inside the checkbox <label>s) still finds the sender,
+    message types, frequency, rates and HELP/STOP. Do NOT hide this or move it
+    behind JS. See SMS_DISCLOSURE in business.ts.
+  */}
+  <div class="rounded-md border border-[color:var(--color-line)] bg-[color:var(--color-sand-100)] p-4 text-sm leading-relaxed text-[color:var(--color-charcoal-600)]">
+    <p>
+      <strong class="text-[color:var(--color-charcoal)]">SMS terms — {SMS_DISCLOSURE.sender}:</strong>
+      {' '}{SMS_DISCLOSURE.messageType} {SMS_DISCLOSURE.frequency} {SMS_DISCLOSURE.rates} {SMS_DISCLOSURE.helpStop}
+    </p>
+  </div>
 
   {/*
     Privacy / Terms links live HERE — below the checkboxes, as their own text.

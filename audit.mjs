@@ -71,6 +71,24 @@ for (const [label, html] of [['quote', quote], ['contact', contact]]) {
   // Forbidden phrase.
   check(`[${label}] does NOT contain "text START"`, !/text START/i.test(html));
 
+  // Visible, server-rendered SMS disclosure paragraph (NOT only in a <label>).
+  // These sentences appear ONLY in the standalone disclosure block, so finding
+  // them in the raw HTML proves the disclosure is server-rendered and visible.
+  const discloseType = 'You will receive transactional messages (appointment confirmations, reminders, service updates) and, if you opt in, marketing messages (offers and seasonal reminders).';
+  const discloseHelp = 'Reply HELP for help. Reply STOP to opt out / unsubscribe.';
+  check(`[${label}] visible SMS disclosure: sender = legal name`, html.includes(`SMS terms — ${LEGAL}:`));
+  check(`[${label}] visible SMS disclosure: message-type sentence`, html.includes(discloseType));
+  check(`[${label}] visible SMS disclosure: "Message frequency may vary."`, html.includes('Message frequency may vary.'));
+  check(`[${label}] visible SMS disclosure: "Message & data rates may apply."`, html.includes('Message &amp; data rates may apply.'));
+  check(`[${label}] visible SMS disclosure: HELP + STOP line`, html.includes(discloseHelp));
+  // The disclosure must live OUTSIDE a checkbox <label> — assert the sentence is
+  // not swallowed inside a consent-text span.
+  check(
+    `[${label}] SMS disclosure is a standalone paragraph, not inside a checkbox label`,
+    !new RegExp(`<span class="consent-text">[^<]*${discloseHelp.replace(/[.*+?^${}()|[\]\\/]/g, '\\$&')}`).test(html) &&
+      html.includes(discloseHelp)
+  );
+
   // Post-submit destination is the thank-you page, not another form.
   check(`[${label}] submits to /thank-you`, /action="\/thank-you"/.test(html));
 }
@@ -106,12 +124,17 @@ check('is a dedicated page', existsSync(join(DIST, 'privacy-policy/index.html'))
 check('states consent is optional / not a condition', /not required to (agree|consent)/i.test(privacy));
 check('includes HELP/STOP language', /Reply <strong>HELP<\/strong>/.test(privacy) && /STOP<\/strong>/.test(privacy));
 check('does NOT contain "text START"', !/text START/i.test(privacy));
+check('has a Cookies & Tracking section', /Cookies &amp; tracking technologies/i.test(privacy));
+check('cookies section explains how to control cookies', /how to control cookies/i.test(privacy));
+// Adding cookies must NOT have removed the SMS no-sharing statement.
+check('still contains the SMS no-sharing clause', privacy.includes(MOBILE_CLAUSE));
 
 /* ------------------------------------------------------------ TERMS -- */
 console.log('\n── TERMS & CONDITIONS ──');
 check('is a dedicated page', existsSync(join(DIST, 'terms/index.html')));
 check('has an SMS/messaging section', /text messaging program/i.test(terms));
 check('states consent is not a condition of purchase', /not a condition of any purchase/i.test(terms));
+check('has an 18+ age-restriction clause', /Age requirement/i.test(terms) && /18 years of age or older/i.test(terms));
 check('does NOT contain "text START"', !/text START/i.test(terms));
 
 /* ------------------------------------------------- NAP CONSISTENCY -- */
