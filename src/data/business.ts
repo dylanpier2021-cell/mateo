@@ -598,12 +598,17 @@ export const CONSENT = {
   transactional: {
     id: 'consent-transactional',
     name: 'consent_transactional',
-    label: `By checking this box, I consent to receive transactional messages related to my account, orders, or services I have requested from ${BUSINESS.legalName}. These messages may include reminders, appointment confirmations, and service updates, among others. Message frequency may vary. Message & data rates may apply. Reply HELP for help or STOP to opt out.`,
+    // NOTE: "Reply HELP for help. Reply STOP to opt out." — TWO sentences on
+    // purpose, so BOTH "Reply HELP for help" and "Reply STOP to opt out" exist as
+    // contiguous phrases. The older "Reply HELP for help or STOP to opt out" form
+    // contains "Reply STOP to opt out" nowhere, and A2P scanners fail that match.
+    label: `By checking this box, I consent to receive transactional messages related to my account, orders, or services I have requested from ${BUSINESS.legalName}. These messages may include reminders, appointment confirmations, and service updates, among others. Message frequency may vary. Message & data rates may apply. Reply HELP for help. Reply STOP to opt out.`,
   },
   marketing: {
     id: 'consent-marketing',
     name: 'consent_marketing',
-    label: `By checking this box, I consent to receive marketing and promotional messages, including special offers, discounts, and seasonal service reminders, among others, from ${BUSINESS.legalName}. Message frequency may vary. Message & data rates may apply. Reply HELP for help or STOP to opt out.`,
+    // Same two-sentence HELP/STOP form as the transactional label above.
+    label: `By checking this box, I consent to receive marketing and promotional messages, including special offers, discounts, and seasonal service reminders, among others, from ${BUSINESS.legalName}. Message frequency may vary. Message & data rates may apply. Reply HELP for help. Reply STOP to opt out.`,
   },
 } as const;
 

@@ -26,8 +26,19 @@ const EMAIL = 'mateobernabe123@gmail.com';
 // check allows this one known address but still flags any OTHER stray free email.
 const ALLOWED_FREE_EMAIL = 'mateobernabe123@gmail.com';
 
-const TRANSACTIONAL = `By checking this box, I consent to receive transactional messages related to my account, orders, or services I have requested from ${LEGAL}. These messages may include reminders, appointment confirmations, and service updates, among others. Message frequency may vary. Message &amp; data rates may apply. Reply HELP for help or STOP to opt out.`;
-const MARKETING = `By checking this box, I consent to receive marketing and promotional messages, including special offers, discounts, and seasonal service reminders, among others, from ${LEGAL}. Message frequency may vary. Message &amp; data rates may apply. Reply HELP for help or STOP to opt out.`;
+const TRANSACTIONAL = `By checking this box, I consent to receive transactional messages related to my account, orders, or services I have requested from ${LEGAL}. These messages may include reminders, appointment confirmations, and service updates, among others. Message frequency may vary. Message &amp; data rates may apply. Reply HELP for help. Reply STOP to opt out.`;
+const MARKETING = `By checking this box, I consent to receive marketing and promotional messages, including special offers, discounts, and seasonal service reminders, among others, from ${LEGAL}. Message frequency may vary. Message &amp; data rates may apply. Reply HELP for help. Reply STOP to opt out.`;
+
+// A2P scanners match required phrases as contiguous strings. Assert each phrase
+// below exists uninterrupted inside every consent-text label span (no inline
+// tag, entity, or the word "or" breaking it), on both forms.
+const LABEL_PHRASES = [
+  LEGAL,
+  'Message frequency may vary',
+  'Message &amp; data rates may apply',
+  'Reply HELP for help',
+  'Reply STOP to opt out',
+];
 const MOBILE_CLAUSE = 'No mobile information will be shared with third parties/affiliates for marketing/promotional purposes. Information sharing to subcontractors in support services, such as customer service is permitted. All other use case categories exclude text messaging originator opt-in data and consent; this information will not be shared with any third parties.';
 
 const quote = read('get-a-free-quote/index.html');
@@ -42,6 +53,16 @@ console.log('\n── FORM RULES ──');
 for (const [label, html] of [['quote', quote], ['contact', contact]]) {
   check(`[${label}] transactional consent text is verbatim`, html.includes(TRANSACTIONAL));
   check(`[${label}] marketing consent text is verbatim`, html.includes(MARKETING));
+
+  // Every required phrase is contiguous INSIDE each consent-text label span.
+  const labelSpans = [...html.matchAll(/<span class="consent-text">(.*?)<\/span>/gs)].map((m) => m[1]);
+  check(`[${label}] found 2 consent label spans`, labelSpans.length === 2, `found ${labelSpans.length}`);
+  for (const phrase of LABEL_PHRASES) {
+    const inEvery = labelSpans.length === 2 && labelSpans.every((span) => span.includes(phrase));
+    check(`[${label}] phrase contiguous in both labels: "${phrase}"`, inEvery);
+  }
+  // Guard: the old non-contiguous "…help or STOP to opt out" form must be gone.
+  check(`[${label}] no "help or STOP to opt out" (would break STOP phrase match)`, !/help or STOP to opt out/i.test(html));
 
   // Extract the consent inputs.
   const inputs = [...html.matchAll(/<input[^>]*name="consent_(transactional|marketing)"[^>]*>/g)].map(m => m[0]);
