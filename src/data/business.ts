@@ -655,6 +655,35 @@ export const LEAD = {
   thankYouPath: '/thank-you',
 } as const;
 
+/* -------------------------------------------------------------------------- */
+/*  REVIEW ROUTING (star gate)                                                  */
+/*                                                                              */
+/*  ⚠️ HEADS-UP — this is "review gating." Sending 4–5★ to a public Google      */
+/*  review while diverting 1–3★ to a private form violates Google's review      */
+/*  policies, and the U.S. FTC has taken enforcement action against it          */
+/*  (e.g. the Fashion Nova matter). It can get a business's reviews suppressed. */
+/*  A compliant alternative: send EVERYONE to Google and ALSO offer a private   */
+/*  feedback channel, without branching on the rating. To make this compliant,  */
+/*  point `feedbackPath` at `googleReviewUrl` (or set positiveThreshold = 1) so */
+/*  every rating goes to Google, and keep /feedback as an optional extra link.  */
+/* -------------------------------------------------------------------------- */
+
+export const REVIEW = {
+  /**
+   * 4–5★ destination — the public Google review page. This is the durable core
+   * of the link you supplied: the place is identified by the feature id in the
+   * `#lrd=` fragment, so the volatile Google session params were dropped. If you
+   * have the Place ID, a cleaner link is
+   * https://search.google.com/local/writereview?placeid=YOUR_PLACE_ID
+   */
+  googleReviewUrl:
+    'https://www.google.com/search?q=Mateo%27s+Landscaping,+contruction+%26+more+LLC+Reviews#lrd=0x880cdbe87d038c17:0x7865453c95c15d2e,3,,,,',
+  /** 1–3★ destination — the private feedback form. */
+  feedbackPath: '/feedback',
+  /** Ratings >= this go to Google; below it go to the private feedback form. */
+  positiveThreshold: 4,
+} as const;
+
 /** Service options offered in form dropdowns. */
 export const SERVICE_OPTIONS = [
   ...SERVICES.map((s) => s.name),

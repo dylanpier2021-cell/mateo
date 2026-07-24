@@ -313,6 +313,37 @@ h4 {
   mask: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path fill='black' d='M9 16.2 4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4z'/></svg>") no-repeat center / contain;
 }
 
+/* --------------------------------------------------------------------------
+   STAR RATING (review gate)
+   Five links (each a real <a>, so routing works with zero JS). Pure-CSS
+   fill-up-to-hovered/focused via :has() — no script needed for the effect.
+   -------------------------------------------------------------------------- */
+.rating-stars {
+  display: inline-flex;
+  gap: 0.35rem;
+}
+.rate-star {
+  color: #d9d2be; /* empty star */
+  transition: transform 0.12s ease, color 0.12s ease;
+  line-height: 0;
+}
+.rate-star:hover {
+  transform: scale(1.12);
+}
+/* Fill the hovered/focused star and every star before it. */
+.rating-stars:has(.rate-star:nth-of-type(1):hover) .rate-star:nth-of-type(-n + 1),
+.rating-stars:has(.rate-star:nth-of-type(2):hover) .rate-star:nth-of-type(-n + 2),
+.rating-stars:has(.rate-star:nth-of-type(3):hover) .rate-star:nth-of-type(-n + 3),
+.rating-stars:has(.rate-star:nth-of-type(4):hover) .rate-star:nth-of-type(-n + 4),
+.rating-stars:has(.rate-star:nth-of-type(5):hover) .rate-star:nth-of-type(-n + 5),
+.rating-stars:has(.rate-star:nth-of-type(1):focus-visible) .rate-star:nth-of-type(-n + 1),
+.rating-stars:has(.rate-star:nth-of-type(2):focus-visible) .rate-star:nth-of-type(-n + 2),
+.rating-stars:has(.rate-star:nth-of-type(3):focus-visible) .rate-star:nth-of-type(-n + 3),
+.rating-stars:has(.rate-star:nth-of-type(4):focus-visible) .rate-star:nth-of-type(-n + 4),
+.rating-stars:has(.rate-star:nth-of-type(5):focus-visible) .rate-star:nth-of-type(-n + 5) {
+  color: #f5b301; /* filled star — gold */
+}
+
 /* Check list rendered on a forest background */
 .check-list--light li {
   color: rgba(255, 255, 255, 0.92);

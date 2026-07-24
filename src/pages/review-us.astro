@@ -1,0 +1,86 @@
+---
+/**
+ * Review us — star gate.
+ *
+ * Each star is a real <a> link (works with zero JS), navigating in the SAME tab
+ * (no target="_blank"):
+ *   • 1–3★  → /feedback  (private feedback form)
+ *   • 4–5★  → Google review page
+ *
+ * ⚠️ This is "review gating" (positive → public, negative → private). It is
+ * against Google's review policies and the FTC has acted on it. The routing is
+ * controlled entirely by REVIEW in business.ts — set positiveThreshold = 1 (or
+ * point feedbackPath at googleReviewUrl) to make it compliant, sending everyone
+ * to Google and keeping /feedback only as an optional private channel.
+ */
+import BaseLayout from '@layouts/BaseLayout.astro';
+import Icon from '@components/Icon.astro';
+import { BUSINESS, REVIEW } from '@data/business';
+
+// Build the five stars with their destinations from the single source of truth.
+const stars = [1, 2, 3, 4, 5].map((n) => ({
+  n,
+  positive: n >= REVIEW.positiveThreshold,
+  href: n >= REVIEW.positiveThreshold ? REVIEW.googleReviewUrl : REVIEW.feedbackPath,
+  label: `${n} ${n === 1 ? 'star' : 'stars'}`,
+}));
+
+const SolidStar = `<svg viewBox="0 0 24 24" fill="currentColor" width="44" height="44" aria-hidden="true"><path d="M12 2.5l2.9 5.88 6.5.95-4.7 4.58 1.11 6.47L12 17.33l-5.81 3.05 1.11-6.47-4.7-4.58 6.5-.95z"/></svg>`;
+---
+
+<BaseLayout
+  title={`Leave Us a Review | ${BUSINESS.legalName}`}
+  description="Tell us how we did. Rate your experience with Mateo Landscaping and More LLC in Champaign, IL."
+  path="/review-us"
+  noindex={true}
+>
+  <section class="bg-[color:var(--color-forest)] text-white">
+    <div class="container-page py-16 sm:py-20 text-center">
+      <p class="eyebrow !text-[color:var(--color-forest-300)]">Your feedback</p>
+      <h1 class="mt-3 text-4xl font-black !text-white sm:text-5xl">How did we do?</h1>
+      <p class="mx-auto mt-5 max-w-xl text-lg text-white/80">
+        Thanks for letting {BUSINESS.name} take care of your property. Tap a star to tell us about
+        your experience.
+      </p>
+    </div>
+  </section>
+
+  <section class="py-16 sm:py-24">
+    <div class="container-page">
+      <div class="mx-auto max-w-xl text-center">
+        <h2 class="text-2xl font-black sm:text-3xl">Rate your experience</h2>
+        <p class="mt-3 text-[color:var(--color-charcoal-600)]">
+          Choose the number of stars that matches how it went.
+        </p>
+
+        {/* Each star is a same-tab link. No JS required, no new tab/window. */}
+        <div
+          class="rating-stars mt-8 justify-center"
+          role="group"
+          aria-label={`Rate ${BUSINESS.name} from 1 to 5 stars`}
+        >
+          {
+            stars.map((s) => (
+              <a
+                class="rate-star"
+                href={s.href}
+                rel={s.positive ? 'noopener' : undefined}
+                aria-label={s.label}
+                title={s.label}
+                set:html={SolidStar}
+              />
+            ))
+          }
+        </div>
+
+        <p class="mt-8 text-sm text-[color:var(--color-slate-soft)]">
+          Your rating helps us keep doing right by Champaign–Urbana. It only takes a moment.
+        </p>
+
+        <div class="mt-10">
+          <a href="/" class="btn-outline">Back to home</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

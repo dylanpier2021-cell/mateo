@@ -45,6 +45,8 @@ const quote = read('get-a-free-quote/index.html');
 const contact = read('contact/index.html');
 const privacy = read('privacy-policy/index.html');
 const terms = read('terms/index.html');
+const reviewUs = read('review-us/index.html');
+const feedback = read('feedback/index.html');
 const thanks = read('thank-you/index.html');
 
 /* ---------------------------------------------------------------- FORMS -- */
@@ -157,6 +159,25 @@ check('has an SMS/messaging section', /text messaging program/i.test(terms));
 check('states consent is not a condition of purchase', /not a condition of any purchase/i.test(terms));
 check('has an 18+ age-restriction clause', /Age requirement/i.test(terms) && /18 years of age or older/i.test(terms));
 check('does NOT contain "text START"', !/text START/i.test(terms));
+
+/* ------------------------------------------------------- REVIEW GATE -- */
+console.log('\n── REVIEW GATE (/review-us + /feedback) ──');
+const stars = [...reviewUs.matchAll(/<a\s+class="rate-star"[^>]*>/g)].map((m) => m[0]);
+check('/review-us has exactly 5 star links', stars.length === 5, `found ${stars.length}`);
+const hrefOf = (tag) => (tag.match(/href="([^"]*)"/) || [])[1];
+if (stars.length === 5) {
+  const hrefs = stars.map(hrefOf);
+  check('stars 1–3 route to /feedback', hrefs.slice(0, 3).every((h) => h === '/feedback'), hrefs.slice(0, 3).join(', '));
+  check('stars 4–5 route to the Google review link', hrefs.slice(3).every((h) => h && h.includes('0x880cdbe87d038c17:0x7865453c95c15d2e')), hrefs.slice(3).join(', '));
+}
+// Same tab: no star link may open a new tab/window.
+check('no star link opens a new tab (no target=_blank)', !stars.some((t) => /target=/.test(t)));
+check('/feedback page exists', existsSync(join(DIST, 'feedback/index.html')));
+check('/feedback has a message field + submit', /name="message"/.test(feedback) && /data-lead-submit/.test(feedback));
+check('/feedback is NOT an SMS opt-in (no consent checkboxes)', !/name="consent_/.test(feedback));
+check('/feedback redirects to /thank-you (not another form)', /action="\/thank-you"/.test(feedback));
+check('/feedback is noindex', /name="robots" content="noindex/.test(feedback));
+check('/review-us is noindex', /name="robots" content="noindex/.test(reviewUs));
 
 /* ------------------------------------------------- NAP CONSISTENCY -- */
 console.log('\n── NAP CONSISTENCY ACROSS EVERY PAGE ──');
